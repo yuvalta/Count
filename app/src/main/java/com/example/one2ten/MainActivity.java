@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         MainMenuFragment mainMenuFragment = new MainMenuFragment();
         fragmentTransaction.add(R.id.frame_layout_for_fragments, mainMenuFragment);
         fragmentTransaction.commit();
+
     }
 
 }

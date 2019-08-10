@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background_top_bar"
+    android:background="@drawable/gradient_background_1"
     android:layoutDirection="ltr"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -13,9 +13,8 @@
     <LinearLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="90dp"
         android:layout_marginTop="23dp"
-        android:background="@drawable/gradient_background_top_bar"
         android:orientation="horizontal">
 
         <ImageButton
@@ -105,7 +104,7 @@
         android:id="@+id/frame_layout_for_fragments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="0dp">
 
 
     </FrameLayout>
