@@ -59,21 +59,21 @@ public class TimerModeFragment extends Fragment {
 //    private TextView cell110, cell111, cell112, cell113, cell114, cell115, cell116, cell117, cell118;
 //    private TextView cell119, cell120, cell121, cell122, cell123, cell124, cell125, cell126, cell127;
 
-    int[] ids = new int[]{R.id.cell0, R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell6, R.id.cell7, R.id.cell8, R.id.cell9, R.id.cell10,
-            R.id.cell11, R.id.cell12, R.id.cell13, R.id.cell14, R.id.cell15, R.id.cell16, R.id.cell17, R.id.cell18, R.id.cell19, R.id.cell20,
-            R.id.cell21, R.id.cell22, R.id.cell23, R.id.cell24, R.id.cell25, R.id.cell26, R.id.cell27, R.id.cell28, R.id.cell29, R.id.cell30,
-            R.id.cell31, R.id.cell32, R.id.cell33, R.id.cell34, R.id.cell35, R.id.cell36, R.id.cell37, R.id.cell38, R.id.cell39, R.id.cell40,
-            R.id.cell41, R.id.cell42, R.id.cell43, R.id.cell44, R.id.cell45, R.id.cell46, R.id.cell47, R.id.cell48, R.id.cell49, R.id.cell50,
-            R.id.cell51, R.id.cell52, R.id.cell53, R.id.cell54, R.id.cell55, R.id.cell56, R.id.cell57, R.id.cell58, R.id.cell59, R.id.cell60,
-            R.id.cell61, R.id.cell62, R.id.cell63, R.id.cell64, R.id.cell65, R.id.cell66, R.id.cell67, R.id.cell68, R.id.cell69, R.id.cell70,
-            R.id.cell71, R.id.cell72, R.id.cell73, R.id.cell74, R.id.cell75, R.id.cell76, R.id.cell77, R.id.cell78, R.id.cell79, R.id.cell80,
-            R.id.cell81, R.id.cell82, R.id.cell83, R.id.cell84, R.id.cell85, R.id.cell86, R.id.cell87, R.id.cell88, R.id.cell89, R.id.cell90,
-            R.id.cell91, R.id.cell92, R.id.cell93, R.id.cell94, R.id.cell95, R.id.cell96, R.id.cell97, R.id.cell98, R.id.cell99, R.id.cell100,
-            R.id.cell101, R.id.cell102, R.id.cell103, R.id.cell104, R.id.cell105, R.id.cell106, R.id.cell107, R.id.cell108, R.id.cell109,
-            R.id.cell110, R.id.cell111, R.id.cell112, R.id.cell113, R.id.cell114, R.id.cell115, R.id.cell116, R.id.cell117, R.id.cell118,
-            R.id.cell119, R.id.cell120, R.id.cell121, R.id.cell122, R.id.cell123, R.id.cell124, R.id.cell125, R.id.cell126, R.id.cell127};
+//    int[] ids = new int[]{R.id.cell0, R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell6, R.id.cell7, R.id.cell8, R.id.cell9, R.id.cell10,
+//            R.id.cell11, R.id.cell12, R.id.cell13, R.id.cell14, R.id.cell15, R.id.cell16, R.id.cell17, R.id.cell18, R.id.cell19, R.id.cell20,
+//            R.id.cell21, R.id.cell22, R.id.cell23, R.id.cell24, R.id.cell25, R.id.cell26, R.id.cell27, R.id.cell28, R.id.cell29, R.id.cell30,
+//            R.id.cell31, R.id.cell32, R.id.cell33, R.id.cell34, R.id.cell35, R.id.cell36, R.id.cell37, R.id.cell38, R.id.cell39, R.id.cell40,
+//            R.id.cell41, R.id.cell42, R.id.cell43, R.id.cell44, R.id.cell45, R.id.cell46, R.id.cell47, R.id.cell48, R.id.cell49, R.id.cell50,
+//            R.id.cell51, R.id.cell52, R.id.cell53, R.id.cell54, R.id.cell55, R.id.cell56, R.id.cell57, R.id.cell58, R.id.cell59, R.id.cell60,
+//            R.id.cell61, R.id.cell62, R.id.cell63, R.id.cell64, R.id.cell65, R.id.cell66, R.id.cell67, R.id.cell68, R.id.cell69, R.id.cell70,
+//            R.id.cell71, R.id.cell72, R.id.cell73, R.id.cell74, R.id.cell75, R.id.cell76, R.id.cell77, R.id.cell78, R.id.cell79, R.id.cell80,
+//            R.id.cell81, R.id.cell82, R.id.cell83, R.id.cell84, R.id.cell85, R.id.cell86, R.id.cell87, R.id.cell88, R.id.cell89, R.id.cell90,
+//            R.id.cell91, R.id.cell92, R.id.cell93, R.id.cell94, R.id.cell95, R.id.cell96, R.id.cell97, R.id.cell98, R.id.cell99, R.id.cell100,
+//            R.id.cell101, R.id.cell102, R.id.cell103, R.id.cell104, R.id.cell105, R.id.cell106, R.id.cell107, R.id.cell108, R.id.cell109,
+//            R.id.cell110, R.id.cell111, R.id.cell112, R.id.cell113, R.id.cell114, R.id.cell115, R.id.cell116, R.id.cell117, R.id.cell118,
+//            R.id.cell119, R.id.cell120, R.id.cell121, R.id.cell122, R.id.cell123, R.id.cell124, R.id.cell125, R.id.cell126, R.id.cell127};
 
-    ArrayList<TextView> listArray = new ArrayList<TextView>(ids.length);
+//    ArrayList<TextView> listArray = new ArrayList<TextView>(ids.length);
 
 //    private ArrayList<View> listArray = new ArrayList<View>(Arrays.asList(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10,
 //            cell11, cell12, cell13, cell14, cell15, cell16, cell17, cell18, cell19, cell20,
@@ -103,7 +103,7 @@ public class TimerModeFragment extends Fragment {
         bindGridViews(view);
 
         setTopBar(View.VISIBLE);
-
+//
         backToMenu.setOnClickListener(ReturnHomeListener);
 
 
@@ -282,10 +282,10 @@ public class TimerModeFragment extends Fragment {
     }
 
     private void initTextViews(View view) {
-        for (int i = 0; i < ids.length; i++) {
-            TextView currentTextView = view.findViewById(ids[i]);
-            listArray.add(currentTextView);
-        }
+//        for (int i = 0; i < ids.length; i++) {
+//            TextView currentTextView = view.findViewById(ids[i]);
+//            listArray.add(currentTextView);
+//        }
 
     }
 
