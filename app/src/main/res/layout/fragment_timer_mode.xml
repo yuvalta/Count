@@ -23,7 +23,6 @@
             android:rowCount="8">
 
             <TextView
-                android:backgroundTint="@color/white"
                 android:id="@+id/cell0"
                 android:layout_row="0"
                 android:layout_rowWeight="1"
@@ -61,7 +60,6 @@
                 android:gravity="center"
                 android:tag="2"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
@@ -75,13 +73,65 @@
                 android:gravity="center"
                 android:tag="3"
                 android:textColor="@color/black"
+                android:textStyle="bold" />
 
+
+            <TextView
+                android:id="@+id/cell4"
+                android:layout_row="1"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="4"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cell5"
+                android:layout_row="1"
+                android:layout_rowWeight="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="5"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cell6"
+                android:layout_row="1"
+                android:layout_rowWeight="1"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="6"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cell7"
+                android:layout_row="1"
+                android:layout_rowWeight="1"
+                android:layout_column="3"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="7"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
 
             <TextView
                 android:id="@+id/cell8"
-                android:layout_row="1"
+                android:layout_row="2"
                 android:layout_rowWeight="1"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
@@ -90,12 +140,11 @@
                 android:gravity="center"
                 android:tag="8"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cell9"
-                android:layout_row="1"
+                android:layout_row="2"
                 android:layout_rowWeight="1"
                 android:layout_column="1"
                 android:layout_columnWeight="1"
@@ -104,13 +153,11 @@
                 android:gravity="center"
                 android:tag="9"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
-            <!--android:layout_margin="-30dp"-->
             <TextView
                 android:id="@+id/cell10"
-                android:layout_row="1"
+                android:layout_row="2"
                 android:layout_rowWeight="1"
                 android:layout_column="2"
                 android:layout_columnWeight="1"
@@ -119,12 +166,11 @@
                 android:gravity="center"
                 android:tag="10"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cell11"
-                android:layout_row="1"
+                android:layout_row="2"
                 android:layout_rowWeight="1"
                 android:layout_column="3"
                 android:layout_columnWeight="1"
@@ -133,28 +179,78 @@
                 android:gravity="center"
                 android:tag="11"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
+
+            <TextView
+                android:id="@+id/cell12"
+                android:layout_row="3"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="12"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cell13"
+                android:layout_row="3"
+                android:layout_rowWeight="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="13"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cell14"
+                android:layout_row="3"
+                android:layout_rowWeight="1"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="14"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cell15"
+                android:layout_row="3"
+                android:layout_rowWeight="1"
+                android:layout_column="3"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="15"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
 
             <TextView
                 android:id="@+id/cell16"
-                android:layout_row="2"
+                android:layout_row="4"
                 android:layout_rowWeight="1"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
-                android:background="@drawable/bottom_left_style"
+                android:background="@drawable/normal_style"
                 android:fontFamily="@font/poiret_family"
                 android:gravity="center"
                 android:tag="16"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cell17"
-                android:layout_row="2"
+                android:layout_row="4"
                 android:layout_rowWeight="1"
                 android:layout_column="1"
                 android:layout_columnWeight="1"
@@ -163,26 +259,24 @@
                 android:gravity="center"
                 android:tag="17"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cell18"
-                android:layout_row="2"
+                android:layout_row="4"
                 android:layout_rowWeight="1"
                 android:layout_column="2"
                 android:layout_columnWeight="1"
-                android:background="@drawable/bottom_right_style"
+                android:background="@drawable/normal_style"
                 android:fontFamily="@font/poiret_family"
                 android:gravity="center"
                 android:tag="18"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cell19"
-                android:layout_row="2"
+                android:layout_row="4"
                 android:layout_rowWeight="1"
                 android:layout_column="3"
                 android:layout_columnWeight="1"
@@ -191,14 +285,65 @@
                 android:gravity="center"
                 android:tag="19"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
+
+            <TextView
+                android:id="@+id/cell20"
+                android:layout_row="5"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="20"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cell21"
+                android:layout_row="5"
+                android:layout_rowWeight="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="21"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cell22"
+                android:layout_row="5"
+                android:layout_rowWeight="1"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="22"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cell23"
+                android:layout_row="5"
+                android:layout_rowWeight="1"
+                android:layout_column="3"
+                android:layout_columnWeight="1"
+                android:background="@drawable/normal_style"
+                android:fontFamily="@font/poiret_family"
+                android:gravity="center"
+                android:tag="23"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
 
             <TextView
                 android:id="@+id/cell24"
-                android:layout_row="3"
+                android:layout_row="6"
                 android:layout_rowWeight="1"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
@@ -207,12 +352,11 @@
                 android:gravity="center"
                 android:tag="24"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cell25"
-                android:layout_row="3"
+                android:layout_row="6"
                 android:layout_rowWeight="1"
                 android:layout_column="1"
                 android:layout_columnWeight="1"
@@ -221,12 +365,11 @@
                 android:gravity="center"
                 android:tag="25"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cell26"
-                android:layout_row="3"
+                android:layout_row="6"
                 android:layout_rowWeight="1"
                 android:layout_column="2"
                 android:layout_columnWeight="1"
@@ -235,12 +378,11 @@
                 android:gravity="center"
                 android:tag="26"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cell27"
-                android:layout_row="3"
+                android:layout_row="6"
                 android:layout_rowWeight="1"
                 android:layout_column="3"
                 android:layout_columnWeight="1"
@@ -249,189 +391,11 @@
                 android:gravity="center"
                 android:tag="27"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
 
-
-
             <TextView
-                android:id="@+id/cell32"
-                android:layout_row="4"
-                android:layout_rowWeight="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="32"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/cell33"
-                android:layout_row="4"
-                android:layout_rowWeight="1"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="33"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/cell34"
-                android:layout_row="4"
-                android:layout_rowWeight="1"
-                android:layout_column="2"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="34"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/cell35"
-                android:layout_row="4"
-                android:layout_rowWeight="1"
-                android:layout_column="3"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="35"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-
-
-            <TextView
-                android:id="@+id/cell40"
-                android:layout_row="5"
-                android:layout_rowWeight="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="40"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/cell41"
-                android:layout_row="5"
-                android:layout_rowWeight="1"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="41"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/cell42"
-                android:layout_row="5"
-                android:layout_rowWeight="1"
-                android:layout_column="2"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="42"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/cell43"
-                android:layout_row="5"
-                android:layout_rowWeight="1"
-                android:layout_column="3"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="43"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-
-
-            <TextView
-                android:id="@+id/cell48"
-                android:layout_row="6"
-                android:layout_rowWeight="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="48"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/cell49"
-                android:layout_row="6"
-                android:layout_rowWeight="1"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="49"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/cell50"
-                android:layout_row="6"
-                android:layout_rowWeight="1"
-                android:layout_column="2"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="50"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/cell51"
-                android:layout_row="6"
-                android:layout_rowWeight="1"
-                android:layout_column="3"
-                android:layout_columnWeight="1"
-                android:background="@drawable/normal_style"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:tag="51"
-                android:textColor="@color/black"
-
-                android:textStyle="bold" />
-
-
-
-
-            <TextView
-                android:id="@+id/cell56"
+                android:id="@+id/cell28"
                 android:layout_row="7"
                 android:layout_rowWeight="1"
                 android:layout_column="0"
@@ -439,13 +403,12 @@
                 android:background="@drawable/normal_style"
                 android:fontFamily="@font/poiret_family"
                 android:gravity="center"
-                android:tag="56"
+                android:tag="28"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/cell57"
+                android:id="@+id/cell29"
                 android:layout_row="7"
                 android:layout_rowWeight="1"
                 android:layout_column="1"
@@ -453,13 +416,12 @@
                 android:background="@drawable/normal_style"
                 android:fontFamily="@font/poiret_family"
                 android:gravity="center"
-                android:tag="57"
+                android:tag="29"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/cell58"
+                android:id="@+id/cell30"
                 android:layout_row="7"
                 android:layout_rowWeight="1"
                 android:layout_column="2"
@@ -467,13 +429,12 @@
                 android:background="@drawable/normal_style"
                 android:fontFamily="@font/poiret_family"
                 android:gravity="center"
-                android:tag="58"
+                android:tag="30"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/cell59"
+                android:id="@+id/cell31"
                 android:layout_row="7"
                 android:layout_rowWeight="1"
                 android:layout_column="3"
@@ -481,15 +442,9 @@
                 android:background="@drawable/normal_style"
                 android:fontFamily="@font/poiret_family"
                 android:gravity="center"
-                android:tag="59"
+                android:tag="31"
                 android:textColor="@color/black"
-
                 android:textStyle="bold" />
-
-
-
-
-
 
 
         </GridLayout>
