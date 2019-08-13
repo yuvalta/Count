@@ -1,5 +1,9 @@
 package com.example.one2ten;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -7,10 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +24,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class TimerModeFragment extends Fragment {
@@ -37,7 +41,7 @@ public class TimerModeFragment extends Fragment {
 
     LinearLayout topBar;
 
-    int randomPlace;
+    int currentRandomPlace;
     int numberToShowOnButton = 1;
 
     TextView timerTV;
@@ -48,10 +52,9 @@ public class TimerModeFragment extends Fragment {
 
     ImageButton backToMenu;
 
-//    private TextView cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10;
-//    private TextView cell11, cell12, cell13, cell14, cell15, cell16, cell17, cell18, cell19, cell20;
-//    private TextView cell21, cell22, cell23, cell24, cell25, cell26, cell27, cell28, cell29, cell30;
-//    private TextView cell31;
+    boolean isFirstClick = true;
+
+    Chronometer stopWatch;
 
     int[] ids = new int[]{R.id.cell0, R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell6, R.id.cell7, R.id.cell8, R.id.cell9, R.id.cell10,
             R.id.cell11, R.id.cell12, R.id.cell13, R.id.cell14, R.id.cell15, R.id.cell16, R.id.cell17, R.id.cell18, R.id.cell19, R.id.cell20,
@@ -71,17 +74,18 @@ public class TimerModeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timer_mode, container, false);
 
+
         bindGridViews(view);
 
         setTopBar(View.VISIBLE);
 
-        randomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+        currentRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
         backToMenu.setOnClickListener(ReturnHomeListener);
 
-        textViewArrayList.get(randomPlace).getBackground().setTint(getResources().getColor(R.color.white));
-        textViewArrayList.get(randomPlace).setText(String.valueOf(numberToShowOnButton++));
-        textViewArrayList.get(randomPlace).setTextSize(40);
+        textViewArrayList.get(currentRandomPlace).getBackground().setTint(getResources().getColor(R.color.white));
+        textViewArrayList.get(currentRandomPlace).setText(String.valueOf(numberToShowOnButton++));
+        textViewArrayList.get(currentRandomPlace).setTextSize(40);
 
         return view;
     }
@@ -98,52 +102,87 @@ public class TimerModeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    Log.d("YT view get tag", view.getTag().toString());
+                    textViewArrayList.get(currentRandomPlace).getBackground().setTint(getResources().getColor(R.color.transparent));
+                    textViewArrayList.get(currentRandomPlace).setText("");
 
-                    textViewArrayList.get(randomPlace).getBackground().setTint(getResources().getColor(R.color.transparent));
-                    textViewArrayList.get(randomPlace).setText("");
+                    int previousRandomPlace = currentRandomPlace;
 
-                    Log.d("YT random1", String.valueOf(randomPlace));
-                    if (view.getTag().equals(String.valueOf(randomPlace))) {
+                    Object tapOfButtonPressed = view.getTag();
+
+                    if (tapOfButtonPressed.equals(String.valueOf(currentRandomPlace))) {
+
+                        startStopWatch();
 
                         currentScoreTV.setText(String.valueOf(numberToShowOnButton)); // set current score
 
-                        randomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+                        currentRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
-                        Log.d("YT random2", String.valueOf(randomPlace));
+//                        fadeOutButton(currentRandomPlace, previousRandomPlace, tapOfButtonPressed);
 
                         // create the current number in square
-                        textViewArrayList.get(randomPlace).getBackground().setTint(getResources().getColor(R.color.white));
-                        textViewArrayList.get(randomPlace).setText(String.valueOf(numberToShowOnButton++));
-                        textViewArrayList.get(randomPlace).setTextSize(30);
+                        textViewArrayList.get(currentRandomPlace).getBackground().setTint(getResources().getColor(R.color.white));
+                        textViewArrayList.get(currentRandomPlace).setText(String.valueOf(numberToShowOnButton++));
+                        textViewArrayList.get(currentRandomPlace).setTextSize(30);
 
                     } else {
-                        Toast.makeText(getActivity(), "You LOSE!", Toast.LENGTH_SHORT).show();
 
-                        for (int i = 0; i < textViewArrayList.size(); i++) {
-                            textViewArrayList.get(i).getBackground().setTint(getResources().getColor(R.color.transparent));
-                            textViewArrayList.get(i).setText("");
-                        }
-                        currentScoreTV.setText("1");
+                        loseGame();
 
-
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager(); // TODO: create dialog with retry and summary of last game
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                        MainMenuFragment mainMenuFragment = new MainMenuFragment();
-                        fragmentTransaction.add(R.id.frame_layout_for_fragments, mainMenuFragment);
-                        fragmentTransaction.commit();
-//                        for (int i = 9; i > 0; i--) {
-//
-//                            TimerTask timerTask = new OpacityTask();
-//                            timer.schedule(timerTask, 20);
-//                            textViewArrayList.get(randomPlace).setAlpha(Float.parseFloat("0." + i));
-//
-//                        }
                     }
                 }
             });
         }
+    }
+
+    public void loseGame() {
+//        for (int i = 0; i < textViewArrayList.size(); i++) {
+//            textViewArrayList.get(i).getBackground().setTint(getResources().getColor(R.color.transparent));
+//            textViewArrayList.get(i).setText("");
+//        }
+        currentScoreTV.setText("1");
+
+        stopWatch.stop();
+        stopWatch.setBase(SystemClock.elapsedRealtime());
+
+        if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    public void startStopWatch() {
+        if (isFirstClick) { // if it's the first click start stop watch
+            stopWatch.setBase(SystemClock.elapsedRealtime());
+            StartTimer();
+            isFirstClick = false;
+        }
+    }
+
+    public void fadeOutButton(final int currentPlaceOfButton, final int previousRandomPlace, final Object tapOfButtonPressed) {
+
+        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(textViewArrayList.get(currentPlaceOfButton), "alpha", 1f, 0f);
+        fadeOut.setDuration(5000);
+
+        final AnimatorSet mAnimationSet = new AnimatorSet();
+
+        mAnimationSet.play(fadeOut);
+
+        mAnimationSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+
+                if (tapOfButtonPressed.equals(String.valueOf(currentPlaceOfButton))) {
+                    Toast.makeText(getActivity(), tapOfButtonPressed.toString() + " " + previousRandomPlace, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+                    Toast.makeText(getActivity(), tapOfButtonPressed.toString() + " -- " + previousRandomPlace, Toast.LENGTH_SHORT).show();
+
+                    loseGame();
+                }
+            }
+        });
+        mAnimationSet.start();
     }
 
     public void bindGridViews(View view) {
@@ -151,7 +190,7 @@ public class TimerModeFragment extends Fragment {
         // topBar binding
         topBar = getActivity().findViewById(R.id.top_bar);
         topBar.setBackgroundResource(R.color.background_gradient_end);
-        timerTV = getActivity().findViewById(R.id.timerTV);
+        stopWatch = getActivity().findViewById(R.id.timerTV);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
         backToMenu = getActivity().findViewById(R.id.back_to_menu_btn);
         currentScoreTV = getActivity().findViewById(R.id.current_scoreTV);
@@ -163,6 +202,10 @@ public class TimerModeFragment extends Fragment {
         initTextViews(view);
     }
 
+    public void StartTimer() {
+        stopWatch.start();
+    }
+
     public int generateRandomNumber(int max, int min) {
         Random r = new Random();
         return r.nextInt(max - min + 1) + min;
@@ -170,7 +213,7 @@ public class TimerModeFragment extends Fragment {
 
 
     private void setTopBar(int showTopBar) {
-        timerTV.setVisibility(showTopBar);
+        stopWatch.setVisibility(showTopBar);
         pointsTV.setVisibility(showTopBar);
         currentScoreTV.setVisibility(showTopBar);
         backToMenu.setVisibility(showTopBar);
@@ -194,22 +237,6 @@ public class TimerModeFragment extends Fragment {
             fragmentTransaction.commit();
         }
     };
-
-    public class OpacityTask extends TimerTask {
-
-        @Override
-        public void run() {
-            waitTask();
-        }
-
-        private void waitTask() {
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
