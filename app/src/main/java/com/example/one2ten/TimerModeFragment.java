@@ -113,6 +113,12 @@ public class TimerModeFragment extends Fragment {
 
                         startStopWatch();
 
+                        if (isFirstClick) { // if it's the first click start stop watch
+                            stopWatch.setBase(SystemClock.elapsedRealtime());
+                            StartTimer();
+                            isFirstClick = false;
+                        }
+
                         currentScoreTV.setText(String.valueOf(numberToShowOnButton)); // set current score
 
                         currentRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
@@ -123,6 +129,25 @@ public class TimerModeFragment extends Fragment {
                         textViewArrayList.get(currentRandomPlace).getBackground().setTint(getResources().getColor(R.color.white));
                         textViewArrayList.get(currentRandomPlace).setText(String.valueOf(numberToShowOnButton++));
                         textViewArrayList.get(currentRandomPlace).setTextSize(30);
+
+//                        for(int i = 255; i>1; i--) {
+//                        Handler handler = new Handler();
+//
+//
+//                            final int finalI = i;
+//                            handler.postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    Toast.makeText(getActivity(), "aaa", Toast.LENGTH_SHORT).show();
+//                                    textViewArrayList.get(randomPlace).getBackground().setAlpha(finalI);
+//                                }
+//                            }, 200);
+//                        }
+
+
+
+//                        textViewArrayList.get(randomPlace).setAlpha(Float.parseFloat("0." + finalI));
+
 
                     } else {
 
