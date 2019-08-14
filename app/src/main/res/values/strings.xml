@@ -9,4 +9,5 @@
     <string name="backward_mode">Backward</string>
     <string name="timer_info">Time</string>
     <string name="high_score_info">High</string>
+    <string name="high_score_shared_pref">highScoreSharedPref</string>
 </resources>

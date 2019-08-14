@@ -4,6 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.icu.util.LocaleData;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +32,15 @@ import java.util.Timer;
 
 public class TimerModeFragment extends Fragment {
 
-    public TimerModeFragment() {
-        // Required empty public constructor
-    }
-
-//    private OnFragmentInteractionListener mListener;
-
     int MAX_BUTTON = 31;
     int MIN_BUTTON = 0;
+    int DURATION_OF_ALPHA = 3000;
 
-    Timer timer = new Timer();
+    int highScore;
+
+    SharedPreferences highScoreInfSharedPref;
+
+    AnimatorSet mAnimationSet;
 
     LinearLayout topBar;
 
@@ -52,7 +55,7 @@ public class TimerModeFragment extends Fragment {
 
     ImageButton backToMenu;
 
-    boolean isFirstClick = true;
+    boolean isFirstClick;
 
     Chronometer stopWatch;
 
@@ -62,6 +65,12 @@ public class TimerModeFragment extends Fragment {
             R.id.cell31};
 
     ArrayList<TextView> textViewArrayList = new ArrayList<TextView>(ids.length);
+
+    public TimerModeFragment() {
+
+//        this.highScoreInfSharedPref = this.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
+//        this.highScore = highScoreInfSharedPref.getInt("highScoreInfinity", 0000);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,10 @@ public class TimerModeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timer_mode, container, false);
 
+        highScoreInfSharedPref = this.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
+        highScore = highScoreInfSharedPref.getInt("highScoreInfinity", 0000);
+
+        isFirstClick = true;
 
         bindGridViews(view);
 
@@ -94,6 +107,7 @@ public class TimerModeFragment extends Fragment {
         for (int i = 0; i < ids.length; i++) {
             TextView currentTextView = view.findViewById(ids[i]);
             textViewArrayList.add(currentTextView);
+            textViewArrayList.get(i).getBackground().setTint(getResources().getColor(R.color.transparent));
         }
 
         for (int i = 0; i < ids.length; i++) { // set listeners to all buttons
@@ -102,56 +116,41 @@ public class TimerModeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
+                    if (mAnimationSet != null) {
+                        mAnimationSet.removeAllListeners();
+                        mAnimationSet.end();
+                        mAnimationSet.cancel();
+                    }
+
                     textViewArrayList.get(currentRandomPlace).getBackground().setTint(getResources().getColor(R.color.transparent));
                     textViewArrayList.get(currentRandomPlace).setText("");
-
-                    int previousRandomPlace = currentRandomPlace;
 
                     Object tapOfButtonPressed = view.getTag();
 
                     if (tapOfButtonPressed.equals(String.valueOf(currentRandomPlace))) {
 
-                        startStopWatch();
 
-                        if (isFirstClick) { // if it's the first click start stop watch
-                            stopWatch.setBase(SystemClock.elapsedRealtime());
-                            StartTimer();
-                            isFirstClick = false;
-                        }
+                        DifficultyOfGame difficultyOfGame = new DifficultyOfGame(DURATION_OF_ALPHA, numberToShowOnButton);
+                        DURATION_OF_ALPHA = difficultyOfGame.getDurationDevideByTen();
+
+                        startStopWatch();
 
                         currentScoreTV.setText(String.valueOf(numberToShowOnButton)); // set current score
 
                         currentRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
-//                        fadeOutButton(currentRandomPlace, previousRandomPlace, tapOfButtonPressed);
+                        fadeOutButton(currentRandomPlace);
+
 
                         // create the current number in square
                         textViewArrayList.get(currentRandomPlace).getBackground().setTint(getResources().getColor(R.color.white));
                         textViewArrayList.get(currentRandomPlace).setText(String.valueOf(numberToShowOnButton++));
                         textViewArrayList.get(currentRandomPlace).setTextSize(30);
 
-//                        for(int i = 255; i>1; i--) {
-//                        Handler handler = new Handler();
-//
-//
-//                            final int finalI = i;
-//                            handler.postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    Toast.makeText(getActivity(), "aaa", Toast.LENGTH_SHORT).show();
-//                                    textViewArrayList.get(randomPlace).getBackground().setAlpha(finalI);
-//                                }
-//                            }, 200);
-//                        }
-
-
-
-//                        textViewArrayList.get(randomPlace).setAlpha(Float.parseFloat("0." + finalI));
-
 
                     } else {
 
-                        loseGame();
+                        loseGame(false);
 
                     }
                 }
@@ -159,15 +158,33 @@ public class TimerModeFragment extends Fragment {
         }
     }
 
-    public void loseGame() {
-//        for (int i = 0; i < textViewArrayList.size(); i++) {
-//            textViewArrayList.get(i).getBackground().setTint(getResources().getColor(R.color.transparent));
-//            textViewArrayList.get(i).setText("");
-//        }
-        currentScoreTV.setText("1");
+    public void loseGame(boolean isPressedReturn) {
+
+        if (!isPressedReturn) {
+            Log.d("ddd","");
+            if (mAnimationSet != null) {
+                Log.d("eee","");
+                mAnimationSet.removeAllListeners();
+                mAnimationSet.end();
+                mAnimationSet.cancel();
+            }
+
+            if (numberToShowOnButton > highScore) { // new high score!!!
+                SharedPreferences.Editor editor = highScoreInfSharedPref.edit();
+                editor.putInt("highScoreInfinity", numberToShowOnButton);
+                editor.commit();
+
+                Toast.makeText(getActivity(), "New High Score!!! - " + numberToShowOnButton, Toast.LENGTH_LONG).show();
+            } else {
+                Log.d("fff","");
+                Toast.makeText(getContext(), "You LOSE!", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         stopWatch.stop();
         stopWatch.setBase(SystemClock.elapsedRealtime());
+
+        currentScoreTV.setText("1");
 
         if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getActivity().getSupportFragmentManager().popBackStack();
@@ -182,12 +199,12 @@ public class TimerModeFragment extends Fragment {
         }
     }
 
-    public void fadeOutButton(final int currentPlaceOfButton, final int previousRandomPlace, final Object tapOfButtonPressed) {
+    public void fadeOutButton(final int currentPlaceOfButton) {
 
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(textViewArrayList.get(currentPlaceOfButton), "alpha", 1f, 0f);
-        fadeOut.setDuration(5000);
+        fadeOut.setDuration(DURATION_OF_ALPHA);
 
-        final AnimatorSet mAnimationSet = new AnimatorSet();
+        mAnimationSet = new AnimatorSet();
 
         mAnimationSet.play(fadeOut);
 
@@ -196,15 +213,8 @@ public class TimerModeFragment extends Fragment {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
 
-                if (tapOfButtonPressed.equals(String.valueOf(currentPlaceOfButton))) {
-                    Toast.makeText(getActivity(), tapOfButtonPressed.toString() + " " + previousRandomPlace, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else {
-                    Toast.makeText(getActivity(), tapOfButtonPressed.toString() + " -- " + previousRandomPlace, Toast.LENGTH_SHORT).show();
+                loseGame(false);
 
-                    loseGame();
-                }
             }
         });
         mAnimationSet.start();
@@ -217,6 +227,9 @@ public class TimerModeFragment extends Fragment {
         topBar.setBackgroundResource(R.color.background_gradient_end);
         stopWatch = getActivity().findViewById(R.id.timerTV);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
+
+        pointsTV.setText(String.valueOf(highScore));
+
         backToMenu = getActivity().findViewById(R.id.back_to_menu_btn);
         currentScoreTV = getActivity().findViewById(R.id.current_scoreTV);
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
@@ -238,6 +251,7 @@ public class TimerModeFragment extends Fragment {
 
 
     private void setTopBar(int showTopBar) {
+
         stopWatch.setVisibility(showTopBar);
         pointsTV.setVisibility(showTopBar);
         currentScoreTV.setVisibility(showTopBar);
@@ -254,12 +268,7 @@ public class TimerModeFragment extends Fragment {
 
     private View.OnClickListener ReturnHomeListener = new View.OnClickListener() {
         public void onClick(View v) {
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            MainMenuFragment mainMenuFragment = new MainMenuFragment();
-            fragmentTransaction.add(R.id.frame_layout_for_fragments, mainMenuFragment);
-            fragmentTransaction.commit();
+            loseGame(true);
         }
     };
 

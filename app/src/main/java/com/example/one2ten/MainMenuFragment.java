@@ -83,9 +83,23 @@ public class MainMenuFragment extends Fragment {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            TimerModeFragment timerModeFragment = new TimerModeFragment();
-            fragmentTransaction.add(R.id.frame_layout_for_fragments, timerModeFragment).addToBackStack("TimerFragment");
-            fragmentTransaction.commit();
+            switch (v.getId()) {
+                case R.id.timer_mode_button:
+
+                    break;
+
+                case R.id.infinity_mode_button:
+
+                    TimerModeFragment timerModeFragment = new TimerModeFragment();
+                    fragmentTransaction.add(R.id.frame_layout_for_fragments, timerModeFragment).addToBackStack("TimerFragment");
+                    fragmentTransaction.commit();
+
+                    break;
+
+                case R.id.backward_mode_button:
+
+                    break;
+            }
 
         }
     };
