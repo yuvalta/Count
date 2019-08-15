@@ -7,19 +7,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainMenuFragment extends Fragment {
-    private TimerModeFragment.OnFragmentInteractionListener mListener;
+    private InfinityModeFragment.OnFragmentInteractionListener mListener;
 
     LinearLayout topBar;
 
@@ -51,7 +48,7 @@ public class MainMenuFragment extends Fragment {
         isPressedBackTwice = false;
 
         topBar = getActivity().findViewById(R.id.top_bar);
-        topBar.setBackgroundResource(R.color.background_gradient_end);
+//        topBar.setBackgroundResource(R.color.background_gradient_end);
 
         timerTV = getActivity().findViewById(R.id.timerTV);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
@@ -90,8 +87,8 @@ public class MainMenuFragment extends Fragment {
 
                 case R.id.infinity_mode_button:
 
-                    TimerModeFragment timerModeFragment = new TimerModeFragment();
-                    fragmentTransaction.add(R.id.frame_layout_for_fragments, timerModeFragment).addToBackStack("TimerFragment");
+                    InfinityModeFragment infinityModeFragment = new InfinityModeFragment();
+                    fragmentTransaction.add(R.id.frame_layout_for_fragments, infinityModeFragment).addToBackStack("TimerFragment");
                     fragmentTransaction.commit();
 
                     break;

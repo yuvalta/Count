@@ -8,6 +8,11 @@
     <string name="current_score">101</string>
     <string name="backward_mode">Backward</string>
     <string name="timer_info">Time</string>
-    <string name="high_score_info">High</string>
+    <string name="high_score_info">Best</string>
     <string name="high_score_shared_pref">highScoreSharedPref</string>
+    <string name="game_over_dialog_title">Game Over :(</string>
+    <string name="your_score_title">Your Score:</string>
+    <string name="your_score">%s</string>
+    <string name="try_again">Try Again!</string>
+    <string name="return_to_menu">Main Menu</string>
 </resources>

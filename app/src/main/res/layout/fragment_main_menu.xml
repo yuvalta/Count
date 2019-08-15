@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background_1"
+    android:background="@color/background_gradient_start"
     android:layoutDirection="ltr"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -23,6 +23,7 @@
             android:layout_marginTop="100dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/start_button_style"
+            android:backgroundTint="@color/menuRed"
             android:fontFamily="@font/poiret_family"
             android:gravity="center"
             android:text="@string/timer_mode"
@@ -36,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/timer_mode_button"
             android:layout_marginHorizontal="20dp"
+            android:backgroundTint="@color/menuYellow"
             android:layout_marginBottom="30dp"
             android:background="@drawable/start_button_style"
             android:fontFamily="@font/poiret_family"
@@ -48,6 +50,7 @@
         <Button
             android:id="@+id/backward_mode_button"
             android:layout_width="match_parent"
+            android:backgroundTint="@color/SteelBlue"
             android:layout_height="wrap_content"
             android:layout_below="@id/infinity_mode_button"
             android:layout_marginHorizontal="20dp"

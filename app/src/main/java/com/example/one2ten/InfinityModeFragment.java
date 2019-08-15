@@ -30,7 +30,7 @@ import java.util.Random;
 import java.util.Timer;
 
 
-public class TimerModeFragment extends Fragment {
+public class InfinityModeFragment extends Fragment {
 
     int MAX_BUTTON = 31;
     int MIN_BUTTON = 0;
@@ -59,6 +59,8 @@ public class TimerModeFragment extends Fragment {
 
     Chronometer stopWatch;
 
+    StopWatch stopper;
+
     int[] ids = new int[]{R.id.cell0, R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell6, R.id.cell7, R.id.cell8, R.id.cell9, R.id.cell10,
             R.id.cell11, R.id.cell12, R.id.cell13, R.id.cell14, R.id.cell15, R.id.cell16, R.id.cell17, R.id.cell18, R.id.cell19, R.id.cell20,
             R.id.cell21, R.id.cell22, R.id.cell23, R.id.cell24, R.id.cell25, R.id.cell26, R.id.cell27, R.id.cell28, R.id.cell29, R.id.cell30,
@@ -66,7 +68,7 @@ public class TimerModeFragment extends Fragment {
 
     ArrayList<TextView> textViewArrayList = new ArrayList<TextView>(ids.length);
 
-    public TimerModeFragment() {
+    public InfinityModeFragment() {
 
 //        this.highScoreInfSharedPref = this.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
 //        this.highScore = highScoreInfSharedPref.getInt("highScoreInfinity", 0000);
@@ -91,6 +93,8 @@ public class TimerModeFragment extends Fragment {
         bindGridViews(view);
 
         setTopBar(View.VISIBLE);
+
+        stopper = new StopWatch(true, stopWatch); // class that it's a stop watch
 
         currentRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
@@ -133,7 +137,7 @@ public class TimerModeFragment extends Fragment {
                         DifficultyOfGame difficultyOfGame = new DifficultyOfGame(DURATION_OF_ALPHA, numberToShowOnButton);
                         DURATION_OF_ALPHA = difficultyOfGame.getDurationDevideByTen();
 
-                        startStopWatch();
+                        stopper.startStopWatch();
 
                         currentScoreTV.setText(String.valueOf(numberToShowOnButton)); // set current score
 
@@ -149,9 +153,7 @@ public class TimerModeFragment extends Fragment {
 
 
                     } else {
-
                         loseGame(false);
-
                     }
                 }
             });
@@ -161,9 +163,8 @@ public class TimerModeFragment extends Fragment {
     public void loseGame(boolean isPressedReturn) {
 
         if (!isPressedReturn) {
-            Log.d("ddd","");
+
             if (mAnimationSet != null) {
-                Log.d("eee","");
                 mAnimationSet.removeAllListeners();
                 mAnimationSet.end();
                 mAnimationSet.cancel();
@@ -176,27 +177,30 @@ public class TimerModeFragment extends Fragment {
 
                 Toast.makeText(getActivity(), "New High Score!!! - " + numberToShowOnButton, Toast.LENGTH_LONG).show();
             } else {
-                Log.d("fff","");
                 Toast.makeText(getContext(), "You LOSE!", Toast.LENGTH_SHORT).show();
             }
         }
 
-        stopWatch.stop();
-        stopWatch.setBase(SystemClock.elapsedRealtime());
+//        stopWatch.stop();
+//        stopWatch.setBase(SystemClock.elapsedRealtime());
+
+        stopper.stopStopWatch();
 
         currentScoreTV.setText("1");
 
-        if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
-            getActivity().getSupportFragmentManager().popBackStack();
-        }
-    }
+        GameOverDialog gameOverDialog = new GameOverDialog(getContext(), getActivity());
+        gameOverDialog.show();
 
-    public void startStopWatch() {
-        if (isFirstClick) { // if it's the first click start stop watch
-            stopWatch.setBase(SystemClock.elapsedRealtime());
-            StartTimer();
-            isFirstClick = false;
+        if (gameOverDialog.returnOrRetry) {
+            gameOverDialog.dismiss();
         }
+        else {
+            if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        }
+
+
     }
 
     public void fadeOutButton(final int currentPlaceOfButton) {
@@ -224,7 +228,7 @@ public class TimerModeFragment extends Fragment {
 
         // topBar binding
         topBar = getActivity().findViewById(R.id.top_bar);
-        topBar.setBackgroundResource(R.color.background_gradient_end);
+//        topBar.setBackgroundResource(R.color.background_gradient_end);
         stopWatch = getActivity().findViewById(R.id.timerTV);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
 
