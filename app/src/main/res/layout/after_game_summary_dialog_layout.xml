@@ -16,19 +16,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 style="@style/NormalText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:text="@string/your_score_title"
                 android:textColor="@color/white" />
 
@@ -37,7 +37,6 @@
                 style="@style/Buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:text="@string/your_score"
                 android:textColor="@color/white" />
 
@@ -46,14 +45,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
             android:orientation="vertical">
 
             <TextView
                 style="@style/NormalText"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_marginHorizontal="20dp"
                 android:text="@string/high_score_info"
                 android:textColor="@color/white" />
 
@@ -62,48 +60,27 @@
                 style="@style/Buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:text="@string/your_score"
                 android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
+
+    <Button
+        android:id="@+id/try_again_button"
+        style="@style/Buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <Button
-            android:paddingHorizontal="10dp"
-            style="@style/Buttons"
-            android:backgroundTint="@color/menuYellow"
-            android:background="@drawable/start_button_style"
-            android:id="@+id/try_again_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="30dp"
-            android:layout_weight="1"
-            android:text="@string/try_again"
-            android:textAllCaps="false" />
-
-        <Button
-            android:paddingHorizontal="10dp"
-            style="@style/Buttons"
-            android:background="@drawable/start_button_style"
-            android:backgroundTint="@color/menuRed"
-            android:id="@+id/return_to_menu_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="30dp"
-            android:layout_weight="1"
-            android:text="@string/return_to_menu"
-            android:textAllCaps="false" />
-
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:background="@drawable/start_button_style"
+        android:backgroundTint="@color/menuYellow"
+        android:clickable="true"
+        android:padding="10dp"
+        android:paddingHorizontal="10dp"
+        android:text="@string/try_again"
+        android:textAllCaps="false" />
 
 
 </LinearLayout>

@@ -6,16 +6,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.icu.util.LocaleData;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,61 +15,60 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
 
 
 public class InfinityModeFragment extends Fragment {
 
-    int MAX_BUTTON = 31;
-    int MIN_BUTTON = 0;
-    int DURATION_OF_ALPHA = 3000;
+    private int MAX_BUTTON = 31;
+    private int MIN_BUTTON = 0;
+    private int DURATION_OF_ALPHA = 3000;
+    private int currentRandomPlace;
+    private int randomColor;
+    private int probability;
+    private int numberToShowOnButton = 1;
+    private int fakeTilePosition;
+    private int highScore;
 
-    int highScore;
+    private SharedPreferences highScoreInfSharedPref;
 
-    SharedPreferences highScoreInfSharedPref;
+    private AnimatorSet mAnimationSet;
 
-    AnimatorSet mAnimationSet;
+    private LinearLayout topBar;
 
-    LinearLayout topBar;
+    private TextView pointsTV;
+    private TextView currentScoreTV;
+    private TextView timeInfo;
+    private TextView highScoreInfo;
 
-    int currentRandomPlace;
-    int numberToShowOnButton = 1;
+    private ImageButton backToMenu;
 
-    TextView timerTV;
-    TextView pointsTV;
-    TextView currentScoreTV;
-    TextView timeInfo;
-    TextView highScoreInfo;
+    private boolean isFirstClick;
 
-    ImageButton backToMenu;
+    private Chronometer stopWatch;
 
-    boolean isFirstClick;
-
-    Chronometer stopWatch;
-
-    StopWatch stopper;
+    private StopWatch stopper;
 
     int[] ids = new int[]{R.id.cell0, R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell6, R.id.cell7, R.id.cell8, R.id.cell9, R.id.cell10,
             R.id.cell11, R.id.cell12, R.id.cell13, R.id.cell14, R.id.cell15, R.id.cell16, R.id.cell17, R.id.cell18, R.id.cell19, R.id.cell20,
             R.id.cell21, R.id.cell22, R.id.cell23, R.id.cell24, R.id.cell25, R.id.cell26, R.id.cell27, R.id.cell28, R.id.cell29, R.id.cell30,
             R.id.cell31};
 
+    int[] colorsArray = new int[]{R.color.menuRed, R.color.menuWhite, R.color.menuYellow, R.color.OliveDrab, R.color.SteelBlue,
+            R.color.MediumPurple, R.color.MediumOrchid, R.color.MediumSpringGreen, R.color.MediumVioletRed, R.color.MediumSeaGreen};
+
     ArrayList<TextView> textViewArrayList = new ArrayList<TextView>(ids.length);
 
     public InfinityModeFragment() {
-
-//        this.highScoreInfSharedPref = this.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
-//        this.highScore = highScoreInfSharedPref.getInt("highScoreInfinity", 0000);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -129,27 +120,46 @@ public class InfinityModeFragment extends Fragment {
                     textViewArrayList.get(currentRandomPlace).getBackground().setTint(getResources().getColor(R.color.transparent));
                     textViewArrayList.get(currentRandomPlace).setText("");
 
+                    if (fakeTilePosition > 0) {
+                        textViewArrayList.get(fakeTilePosition).getBackground().setTint(getResources().getColor(R.color.transparent));
+                        textViewArrayList.get(fakeTilePosition).setText("");
+                    }
+
+
                     Object tapOfButtonPressed = view.getTag();
 
                     if (tapOfButtonPressed.equals(String.valueOf(currentRandomPlace))) {
 
-
-                        DifficultyOfGame difficultyOfGame = new DifficultyOfGame(DURATION_OF_ALPHA, numberToShowOnButton);
-                        DURATION_OF_ALPHA = difficultyOfGame.getDurationDevideByTen();
+                        DifficultyOfGame difficultyOfGame = new DifficultyOfGame(numberToShowOnButton);
+                        DURATION_OF_ALPHA = difficultyOfGame.getDuration();
+                        probability = difficultyOfGame.getProbability();
 
                         stopper.startStopWatch();
 
-                        currentScoreTV.setText(String.valueOf(numberToShowOnButton)); // set current score
+                        currentScoreTV.setText(String.valueOf(numberToShowOnButton - 1)); // set current score
+
+                        if (numberToShowOnButton > highScore) { // new high score!!!
+                            pointsTV.setText(String.valueOf(numberToShowOnButton));
+                        }
 
                         currentRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+                        randomColor = generateRandomNumber(colorsArray.length - 1, 0);
 
                         fadeOutButton(currentRandomPlace);
 
-
                         // create the current number in square
-                        textViewArrayList.get(currentRandomPlace).getBackground().setTint(getResources().getColor(R.color.white));
+                        textViewArrayList.get(currentRandomPlace).getBackground().setTint(getResources().getColor(colorsArray[randomColor]));
                         textViewArrayList.get(currentRandomPlace).setText(String.valueOf(numberToShowOnButton++));
                         textViewArrayList.get(currentRandomPlace).setTextSize(30);
+
+                        if (generateRandomNumber(100, 0) < probability) {
+                            fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+                            textViewArrayList.get(fakeTilePosition).getBackground().setTint(getResources().getColor(colorsArray[randomColor - 1]));
+                            textViewArrayList.get(fakeTilePosition).setText(String.valueOf(generateRandomNumber(numberToShowOnButton - 1, 1)));
+                            textViewArrayList.get(fakeTilePosition).setTextSize(30);
+                        } else {
+                            fakeTilePosition = -1;
+                        }
 
 
                     } else {
@@ -170,34 +180,23 @@ public class InfinityModeFragment extends Fragment {
                 mAnimationSet.cancel();
             }
 
-            if (numberToShowOnButton > highScore) { // new high score!!!
+            if (numberToShowOnButton - 1 > highScore) { // new high score!!!
                 SharedPreferences.Editor editor = highScoreInfSharedPref.edit();
-                editor.putInt("highScoreInfinity", numberToShowOnButton);
+                editor.putInt("highScoreInfinity", numberToShowOnButton - 1);
                 editor.commit();
 
-                Toast.makeText(getActivity(), "New High Score!!! - " + numberToShowOnButton, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getContext(), "You LOSE!", Toast.LENGTH_SHORT).show();
             }
         }
-
-//        stopWatch.stop();
-//        stopWatch.setBase(SystemClock.elapsedRealtime());
 
         stopper.stopStopWatch();
 
-        currentScoreTV.setText("1");
+        currentScoreTV.setText("0");
 
-        GameOverDialog gameOverDialog = new GameOverDialog(getContext(), getActivity());
+        GameOverDialog gameOverDialog = new GameOverDialog(getContext(), getActivity(), numberToShowOnButton - 1);
         gameOverDialog.show();
 
-        if (gameOverDialog.returnOrRetry) {
-            gameOverDialog.dismiss();
-        }
-        else {
-            if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
+        if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            getActivity().getSupportFragmentManager().popBackStack();
         }
 
 
@@ -221,6 +220,7 @@ public class InfinityModeFragment extends Fragment {
 
             }
         });
+
         mAnimationSet.start();
     }
 
@@ -228,7 +228,6 @@ public class InfinityModeFragment extends Fragment {
 
         // topBar binding
         topBar = getActivity().findViewById(R.id.top_bar);
-//        topBar.setBackgroundResource(R.color.background_gradient_end);
         stopWatch = getActivity().findViewById(R.id.timerTV);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
 
@@ -239,7 +238,7 @@ public class InfinityModeFragment extends Fragment {
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
         timeInfo = getActivity().findViewById(R.id.timer_infoTV);
 
-        currentScoreTV.setText("1"); // set current score
+        currentScoreTV.setText("0"); // set current score
 
         initTextViews(view);
     }

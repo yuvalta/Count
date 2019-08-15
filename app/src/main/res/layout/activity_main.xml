@@ -14,22 +14,22 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:layout_marginTop="23dp"
         android:orientation="horizontal">
 
         <ImageButton
-            android:layout_weight="1"
             android:id="@+id/back_to_menu_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_arrow_back_black_50dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="3">
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/timer_infoTV"
@@ -57,13 +57,14 @@
 
 
         <TextView
-            android:layout_weight="3"
+
             android:id="@+id/current_scoreTV"
             android:layout_width="85dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
+            android:layout_gravity="bottom"
+            android:layout_weight="4"
             android:fontFamily="@font/poiret_family"
+            android:gravity="center"
             android:text="@string/current_score"
             android:textColor="@color/Gold"
             android:textSize="40sp"
@@ -71,10 +72,12 @@
 
 
         <LinearLayout
-            android:layout_weight="3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_gravity="bottom"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/high_score_infoTV"
                 android:layout_width="wrap_content"

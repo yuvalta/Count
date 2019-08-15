@@ -13,6 +13,6 @@
     <string name="game_over_dialog_title">Game Over :(</string>
     <string name="your_score_title">Your Score:</string>
     <string name="your_score">%s</string>
-    <string name="try_again">Try Again!</string>
+    <string name="try_again">Try Again</string>
     <string name="return_to_menu">Main Menu</string>
 </resources>
