@@ -44,7 +44,7 @@ public class GameOverDialog extends Dialog {
         yourScore.setText(String.valueOf(score - 1));
 
         SharedPreferences highScoreInfSharedPref = activity.getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
-        bestScore.setText((String.valueOf(highScoreInfSharedPref.getInt("highScoreInfinity", 0000))));
+        bestScore.setText((String.valueOf(highScoreInfSharedPref.getInt("highScoreInfinity", 0000) - 1)));
 
         tryAgainButton = findViewById(R.id.try_again_button);
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
