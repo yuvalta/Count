@@ -130,6 +130,11 @@ public class InfinityModeFragment extends Fragment {
                     Object tapOfButtonPressed = view.getTag();
 
                     if (tapOfButtonPressed.equals(String.valueOf(currentTileRandomPlace))) {
+<<<<<<< Updated upstream
+=======
+
+                        makeSounds();
+>>>>>>> Stashed changes
 
                         DifficultyOfGame difficultyOfGame = new DifficultyOfGame(numberToShowOnButton);
                         DURATION_OF_ALPHA = difficultyOfGame.getDuration();
@@ -147,6 +152,7 @@ public class InfinityModeFragment extends Fragment {
                         randomColor = generateRandomNumber(colorsArray.length - 1, 0);
 
                         fadeOutButton(currentTileRandomPlace);
+<<<<<<< Updated upstream
 
                         Log.d("random ", String.valueOf(generateRandomNumber(3, 0)));
 
@@ -171,6 +177,15 @@ public class InfinityModeFragment extends Fragment {
                                 textViewArrayList.get(fakeTilePosition).setTextSize(30);
                             }
 
+=======
+
+                        createTile(currentTileRandomPlace);
+
+                        if (generateRandomNumber(100, 0) < probability) {
+
+                            fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+                            createTile(currentTileRandomPlace % colorsArray.length); // create fake tile with some arbitrary color
+>>>>>>> Stashed changes
                         } else {
                             fakeTilePosition = -1;
                         }
@@ -216,6 +231,15 @@ public class InfinityModeFragment extends Fragment {
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    public void createTile(int position) {
+        textViewArrayList.get(position).getBackground().setTint(getResources().getColor(colorsArray[randomColor]));
+        textViewArrayList.get(position).setText(String.valueOf(numberToShowOnButton++));
+        textViewArrayList.get(position).setTextSize(30);
+    }
+
+>>>>>>> Stashed changes
     public void makeSounds() {
         if (numberToShowOnButton % 10 == 0) {
             final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.level_up);
