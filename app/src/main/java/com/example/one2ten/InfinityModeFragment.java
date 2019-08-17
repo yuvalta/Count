@@ -130,11 +130,8 @@ public class InfinityModeFragment extends Fragment {
                     Object tapOfButtonPressed = view.getTag();
 
                     if (tapOfButtonPressed.equals(String.valueOf(currentTileRandomPlace))) {
-<<<<<<< Updated upstream
-=======
 
                         makeSounds();
->>>>>>> Stashed changes
 
                         DifficultyOfGame difficultyOfGame = new DifficultyOfGame(numberToShowOnButton);
                         DURATION_OF_ALPHA = difficultyOfGame.getDuration();
@@ -152,32 +149,6 @@ public class InfinityModeFragment extends Fragment {
                         randomColor = generateRandomNumber(colorsArray.length - 1, 0);
 
                         fadeOutButton(currentTileRandomPlace);
-<<<<<<< Updated upstream
-
-                        Log.d("random ", String.valueOf(generateRandomNumber(3, 0)));
-
-
-                        // create the current number in square
-                        textViewArrayList.get(currentTileRandomPlace).getBackground().setTint(getResources().getColor(colorsArray[randomColor]));
-                        textViewArrayList.get(currentTileRandomPlace).setText(String.valueOf(numberToShowOnButton++));
-                        textViewArrayList.get(currentTileRandomPlace).setTextSize(30);
-
-
-                        if (generateRandomNumber(100, 0) < probability) {
-                            Log.d("random fake", String.valueOf(fakeTilePosition));
-                            fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
-
-                            if (fakeTilePosition != currentTileRandomPlace) { // make sure that we don't use same place for fake and real tiles
-                                textViewArrayList.get(fakeTilePosition).getBackground().setTint(getResources()
-                                        .getColor(colorsArray[currentTileRandomPlace % colorsArray.length])); // put random color to fake tile
-
-                                textViewArrayList.get(fakeTilePosition)
-                                        .setText(String.valueOf(generateRandomNumber(numberToShowOnButton / 2, 1)));
-
-                                textViewArrayList.get(fakeTilePosition).setTextSize(30);
-                            }
-
-=======
 
                         createTile(currentTileRandomPlace);
 
@@ -185,7 +156,6 @@ public class InfinityModeFragment extends Fragment {
 
                             fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
                             createTile(currentTileRandomPlace % colorsArray.length); // create fake tile with some arbitrary color
->>>>>>> Stashed changes
                         } else {
                             fakeTilePosition = -1;
                         }
@@ -231,15 +201,12 @@ public class InfinityModeFragment extends Fragment {
         }
     }
 
-<<<<<<< Updated upstream
-=======
     public void createTile(int position) {
         textViewArrayList.get(position).getBackground().setTint(getResources().getColor(colorsArray[randomColor]));
         textViewArrayList.get(position).setText(String.valueOf(numberToShowOnButton++));
         textViewArrayList.get(position).setTextSize(30);
     }
 
->>>>>>> Stashed changes
     public void makeSounds() {
         if (numberToShowOnButton % 10 == 0) {
             final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.level_up);
