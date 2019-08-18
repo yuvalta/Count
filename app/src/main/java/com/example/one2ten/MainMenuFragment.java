@@ -31,6 +31,10 @@ public class MainMenuFragment extends Fragment {
     Button backwardModeButton;
     ImageButton backToMenu;
 
+    ImageButton muteSounds;
+
+    boolean isMute = false;
+
     boolean isPressedBackTwice;
 
     @Override
@@ -64,6 +68,9 @@ public class MainMenuFragment extends Fragment {
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
         timeInfo = getActivity().findViewById(R.id.timer_infoTV);
 
+        muteSounds = view.findViewById(R.id.mute_sounds);
+        muteSounds.setOnClickListener(muteListener);
+
         timerModeButton.setOnClickListener(modeSelectionListener);
         infinityModeButton.setOnClickListener(modeSelectionListener);
         backwardModeButton.setOnClickListener(modeSelectionListener);
@@ -73,6 +80,22 @@ public class MainMenuFragment extends Fragment {
         return view;
 
     }
+
+    private View.OnClickListener muteListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            if (isMute) {
+                muteSounds.setBackgroundResource(R.drawable.ic_volume_up_black_24dp);
+                isMute = false;
+            }
+            else {
+                muteSounds.setBackgroundResource(R.drawable.ic_volume_off_black_24dp);
+                isMute = true;
+            }
+
+        }
+    };
 
     private View.OnClickListener modeSelectionListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -87,7 +110,7 @@ public class MainMenuFragment extends Fragment {
 
                 case R.id.infinity_mode_button:
 
-                    InfinityModeFragment infinityModeFragment = new InfinityModeFragment();
+                    InfinityModeFragment infinityModeFragment = new InfinityModeFragment(isMute);
                     fragmentTransaction.add(R.id.frame_layout_for_fragments, infinityModeFragment).addToBackStack("TimerFragment");
                     fragmentTransaction.commit();
 
@@ -117,17 +140,6 @@ public class MainMenuFragment extends Fragment {
 
         }
     };
-
-//    @Override
-//    public void onDestroy() {
-//        if(!isPressedBackTwice) {
-//            Toast.makeText(getContext(), "Press again to exit", Toast.LENGTH_LONG).show();
-//            isPressedBackTwice = true;
-//        }
-//        else {
-//            super.onDestroy();
-//        }
-//    }
 
     public MainMenuFragment() {
         // Required empty public constructor

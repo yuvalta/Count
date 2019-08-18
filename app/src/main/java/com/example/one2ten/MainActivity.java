@@ -9,6 +9,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
+//import com.google.android.gms.ads.MobileAds;
+//import com.google.android.gms.ads.initialization.InitializationStatus;
+//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -25,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ////////////////////////////////////////
+
+//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(InitializationStatus initializationStatus) {
+//            }
+//        });
 
         highScoreInfSharedPref = getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
 
