@@ -36,7 +36,7 @@ public class DifficultyOfGame {
     public void getLevel(int level) {
         switch (level / 10) {
             case 0:
-                probability = 5;
+                probability = 0;
                 duration = LEVEL_1;
                 break;
             case 1:
@@ -48,7 +48,7 @@ public class DifficultyOfGame {
                 duration = LEVEL_2;
                 break;
             case 3:
-                probability = 30;
+                probability = 50;
                 duration = LEVEL_3;
                 break;
             case 4:

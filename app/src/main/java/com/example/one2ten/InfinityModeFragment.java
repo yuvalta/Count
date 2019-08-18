@@ -5,9 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.net.sip.SipSession;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.rewarded.RewardedAd;
+//import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -35,6 +41,9 @@ public class InfinityModeFragment extends Fragment {
     private int numberToShowOnButton = 1;
     private int fakeTilePosition = -1;
     private int highScore;
+    private int secondFakePosition = -1;
+
+    boolean isMute = false;
 
     private SharedPreferences highScoreInfSharedPref;
 
@@ -55,6 +64,10 @@ public class InfinityModeFragment extends Fragment {
 
     private StopWatch stopper;
 
+    MediaPlayer clickMp, levelUpMp;
+
+//    private RewardedAd rewardedAd;
+
     int[] ids = new int[]{R.id.cell0, R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell6, R.id.cell7, R.id.cell8, R.id.cell9, R.id.cell10,
             R.id.cell11, R.id.cell12, R.id.cell13, R.id.cell14, R.id.cell15, R.id.cell16, R.id.cell17, R.id.cell18, R.id.cell19, R.id.cell20,
             R.id.cell21, R.id.cell22, R.id.cell23, R.id.cell24, R.id.cell25, R.id.cell26, R.id.cell27, R.id.cell28, R.id.cell29, R.id.cell30,
@@ -65,18 +78,38 @@ public class InfinityModeFragment extends Fragment {
 
     ArrayList<TextView> textViewArrayList = new ArrayList<TextView>(ids.length);
 
-    public InfinityModeFragment() {
+    public InfinityModeFragment(boolean isMute) {
+        this.isMute = isMute;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        rewardedAd = new RewardedAd(getContext(), "ca-app-pub-3940256099942544/5224354917");
+//
+//        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+//            @Override
+//            public void onRewardedAdLoaded() {
+//                // Ad successfully loaded.
+//            }
+//
+//            @Override
+//            public void onRewardedAdFailedToLoad(int errorCode) {
+//                // Ad failed to load. look for return values on https://developers.google.com/admob/android/rewarded-ads
+//            }
+//        };
+//        rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timer_mode, container, false);
+
+
+        clickMp = MediaPlayer.create(getContext(), R.raw.level_up);
+        levelUpMp = MediaPlayer.create(getContext(), R.raw.click);
 
         highScoreInfSharedPref = this.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
         highScore = highScoreInfSharedPref.getInt("highScoreInfinity", 0000);
@@ -93,9 +126,7 @@ public class InfinityModeFragment extends Fragment {
 
         backToMenu.setOnClickListener(ReturnHomeListener);
 
-        textViewArrayList.get(currentTileRandomPlace).getBackground().setTint(getResources().getColor(R.color.white));
-        textViewArrayList.get(currentTileRandomPlace).setText(String.valueOf(numberToShowOnButton++));
-        textViewArrayList.get(currentTileRandomPlace).setTextSize(40);
+        createTile(currentTileRandomPlace, 1, numberToShowOnButton++);
 
         return view;
     }
@@ -119,19 +150,23 @@ public class InfinityModeFragment extends Fragment {
                         mAnimationSet.cancel();
                     }
 
-                    textViewArrayList.get(currentTileRandomPlace).getBackground().setTint(getResources().getColor(R.color.transparent));
-                    textViewArrayList.get(currentTileRandomPlace).setText("");
+                    tileCleanup(currentTileRandomPlace);
 
                     if (fakeTilePosition >= 0) {
-                        textViewArrayList.get(fakeTilePosition).getBackground().setTint(getResources().getColor(R.color.transparent));
-                        textViewArrayList.get(fakeTilePosition).setText("");
+                        tileCleanup(fakeTilePosition);
+                    }
+                    if (secondFakePosition >= 0) {
+                        tileCleanup(secondFakePosition);
                     }
 
                     Object tapOfButtonPressed = view.getTag();
 
                     if (tapOfButtonPressed.equals(String.valueOf(currentTileRandomPlace))) {
 
-                        makeSounds();
+                        if (!isMute) {
+                            makeSounds();
+                        }
+
 
                         DifficultyOfGame difficultyOfGame = new DifficultyOfGame(numberToShowOnButton);
                         DURATION_OF_ALPHA = difficultyOfGame.getDuration();
@@ -150,19 +185,31 @@ public class InfinityModeFragment extends Fragment {
 
                         fadeOutButton(currentTileRandomPlace);
 
-                        createTile(currentTileRandomPlace);
+                        createTile(currentTileRandomPlace, randomColor, numberToShowOnButton++);
 
-                        if (generateRandomNumber(100, 0) < probability) {
+                        fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
-                            fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
-                            createTile(currentTileRandomPlace % colorsArray.length); // create fake tile with some arbitrary color
+                        if (generateRandomNumber(100, 0) < probability && fakeTilePosition != currentTileRandomPlace) {
+
+                            createTile(fakeTilePosition, numberToShowOnButton % colorsArray.length,
+                                    generateRandomNumber(numberToShowOnButton / 2, 1)); // create fake tile with some arbitrary color
+
+                            secondFakePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+                            if (generateRandomNumber(100, 0) < (probability / 2) && secondFakePosition != fakeTilePosition) {
+
+                                createTile(secondFakePosition, currentTileRandomPlace % colorsArray.length,
+                                        generateRandomNumber(numberToShowOnButton / 2, 1));
+                            } else {
+                                secondFakePosition = -1;
+                            }
+
                         } else {
                             fakeTilePosition = -1;
                         }
 
 
                     } else {
-                        loseGame(false);
+                        loseGame(true);
                     }
                 }
             });
@@ -171,49 +218,53 @@ public class InfinityModeFragment extends Fragment {
 
     public void loseGame(boolean isPressedReturn) {
 
-        if (!isPressedReturn) {
+        if (mAnimationSet != null) {
+            mAnimationSet.removeAllListeners();
+            mAnimationSet.end();
+            mAnimationSet.cancel();
+        }
+//        stopper.stopStopWatch();
 
-            if (mAnimationSet != null) {
-                mAnimationSet.removeAllListeners();
-                mAnimationSet.end();
-                mAnimationSet.cancel();
-            }
+        currentScoreTV.setText("0");
+
+        clickMp.release();
+        levelUpMp.release();
+
+        if (isPressedReturn) {
+            GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this, numberToShowOnButton - 1, mAnimationSet);
+            gameOverDialog.show();
+            gameOverDialog.resumeButton.setVisibility(View.INVISIBLE);
 
             if (numberToShowOnButton - 1 > highScore) { // new high score!!!
                 SharedPreferences.Editor editor = highScoreInfSharedPref.edit();
                 editor.putInt("highScoreInfinity", numberToShowOnButton - 1);
                 editor.commit();
-
             }
-        }
-
-//        stopper.stopStopWatch();
-
-        currentScoreTV.setText("0");
-
-        if (getContext() != null && getActivity() != null) { // checks for null exception
-            GameOverDialog gameOverDialog = new GameOverDialog(getContext(), getActivity(), numberToShowOnButton - 1);
-            gameOverDialog.show();
-
+        } else {
             if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         }
+
     }
 
-    public void createTile(int position) {
+    public void tileCleanup(int position) {
+        textViewArrayList.get(position).getBackground().setTint(getResources().getColor(R.color.transparent));
+        textViewArrayList.get(position).setText("");
+    }
+
+    public void createTile(int position, int randomColor, int numberToShowOnButton) {
         textViewArrayList.get(position).getBackground().setTint(getResources().getColor(colorsArray[randomColor]));
         textViewArrayList.get(position).setText(String.valueOf(numberToShowOnButton++));
         textViewArrayList.get(position).setTextSize(30);
     }
 
     public void makeSounds() {
+
         if (numberToShowOnButton % 10 == 0) {
-            final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.level_up);
-            mp.start();
+            clickMp.start();
         } else {
-            final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.click);
-            mp.start();
+            levelUpMp.start();
         }
     }
 
@@ -243,7 +294,6 @@ public class InfinityModeFragment extends Fragment {
 
         // topBar binding
         topBar = getActivity().findViewById(R.id.top_bar);
-//        stopWatch = getActivity().findViewById(R.id.timerTV);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
 
         pointsTV.setText(String.valueOf(highScore));
@@ -251,7 +301,6 @@ public class InfinityModeFragment extends Fragment {
         backToMenu = getActivity().findViewById(R.id.back_to_menu_btn);
         currentScoreTV = getActivity().findViewById(R.id.current_scoreTV);
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
-//        timeInfo = getActivity().findViewById(R.id.timer_infoTV);
 
         currentScoreTV.setText("0"); // set current score
 
@@ -266,11 +315,9 @@ public class InfinityModeFragment extends Fragment {
 
     private void setTopBar(int showTopBar) {
 
-//        stopWatch.setVisibility(showTopBar);
         pointsTV.setVisibility(showTopBar);
         currentScoreTV.setVisibility(showTopBar);
         backToMenu.setVisibility(showTopBar);
-//        timeInfo.setVisibility(showTopBar);
         highScoreInfo.setVisibility(showTopBar);
     }
 
@@ -282,7 +329,11 @@ public class InfinityModeFragment extends Fragment {
 
     private View.OnClickListener ReturnHomeListener = new View.OnClickListener() {
         public void onClick(View v) {
-            loseGame(true);
+
+            mAnimationSet.pause();
+
+            GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this, numberToShowOnButton - 1, mAnimationSet);
+            gameOverDialog.show();
         }
     };
 

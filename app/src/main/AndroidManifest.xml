@@ -16,6 +16,10 @@
             android:name="com.google.android.actions"
             android:resource="@font/squareo_white" />
 
+        <!--<meta-data-->
+            <!--android:name="com.google.android.gms.ads.APPLICATION_ID"-->
+            <!--android:value="ca-app-pub-3940256099942544/5224354917"/>-->
+
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
