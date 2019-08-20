@@ -85,17 +85,14 @@
 
             <ImageButton
                 android:id="@+id/mute_sounds"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:background="@drawable/settings_button_style"
                 android:fontFamily="@font/poiret_family"
                 android:gravity="center"
                 android:src="@drawable/ic_volume_up_black_24dp"
-                android:tag="1"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="30sp" />
+                android:tag="1" />
 
             <Button
                 android:id="@+id/button3"

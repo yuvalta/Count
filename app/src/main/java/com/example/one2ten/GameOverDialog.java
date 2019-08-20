@@ -52,11 +52,17 @@ public class GameOverDialog extends Dialog {
 
         SharedPreferences highScoreInfSharedPref = activity.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
 
+        int currentHighScore = (highScoreInfSharedPref.getInt("highScoreInfinity", 0000));
+
         if (highScoreInfSharedPref.getInt("highScoreInfinity", 0000) == 0) {
             bestScore.setText((String.valueOf(highScoreInfSharedPref.getInt("highScoreInfinity", 0000))));
-        }
-        else {
+        } else {
+
+            if (score > currentHighScore) { // new high score
+                highScoreMessage.setVisibility(View.VISIBLE);
+            }
             bestScore.setText((String.valueOf(highScoreInfSharedPref.getInt("highScoreInfinity", 0000) - 1)));
+
         }
 
         resumeButton = findViewById(R.id.resume_button);
@@ -64,6 +70,7 @@ public class GameOverDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 animatorSet.resume();
+                highScoreMessage.setVisibility(View.INVISIBLE);
                 dismiss();
             }
         });
@@ -74,7 +81,7 @@ public class GameOverDialog extends Dialog {
             public void onClick(View view) {
 
                 activity.loseGame(false);
-
+                highScoreMessage.setVisibility(View.INVISIBLE);
                 dismiss();
             }
         });

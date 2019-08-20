@@ -5,13 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.net.sip.SipSession;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +47,7 @@ public class InfinityModeFragment extends Fragment {
     private AnimatorSet mAnimationSet;
 
     private LinearLayout topBar;
+    private LinearLayout timerLinearLayout;
 
     private TextView pointsTV;
     private TextView currentScoreTV;
@@ -105,8 +103,7 @@ public class InfinityModeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_timer_mode, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_infinity_mode, container, false);
 
         clickMp = MediaPlayer.create(getContext(), R.raw.level_up);
         levelUpMp = MediaPlayer.create(getContext(), R.raw.click);
@@ -166,7 +163,6 @@ public class InfinityModeFragment extends Fragment {
                         if (!isMute) {
                             makeSounds();
                         }
-
 
                         DifficultyOfGame difficultyOfGame = new DifficultyOfGame(numberToShowOnButton);
                         DURATION_OF_ALPHA = difficultyOfGame.getDuration();
@@ -232,6 +228,8 @@ public class InfinityModeFragment extends Fragment {
 
         if (isPressedReturn) {
             GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this, numberToShowOnButton - 1, mAnimationSet);
+            gameOverDialog.setCancelable(false);
+            gameOverDialog.setCanceledOnTouchOutside(false);
             gameOverDialog.show();
             gameOverDialog.resumeButton.setVisibility(View.INVISIBLE);
 
@@ -294,14 +292,14 @@ public class InfinityModeFragment extends Fragment {
 
         // topBar binding
         topBar = getActivity().findViewById(R.id.top_bar);
+        timerLinearLayout = getActivity().findViewById(R.id.timer_ll);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
-
-        pointsTV.setText(String.valueOf(highScore));
-
         backToMenu = getActivity().findViewById(R.id.back_to_menu_btn);
         currentScoreTV = getActivity().findViewById(R.id.current_scoreTV);
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
 
+        pointsTV.setText(String.valueOf(highScore));
+        timerLinearLayout.getLayoutParams().width = 110; // TODO - fix this static assignment
         currentScoreTV.setText("0"); // set current score
 
         initTextViews(view);
@@ -330,10 +328,14 @@ public class InfinityModeFragment extends Fragment {
     private View.OnClickListener ReturnHomeListener = new View.OnClickListener() {
         public void onClick(View v) {
 
-            mAnimationSet.pause();
+            if (numberToShowOnButton != 2) {
+                mAnimationSet.pause();
 
-            GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this, numberToShowOnButton - 1, mAnimationSet);
-            gameOverDialog.show();
+                GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this, numberToShowOnButton - 1, mAnimationSet);
+                gameOverDialog.setCancelable(false);
+                gameOverDialog.setCanceledOnTouchOutside(false);
+                gameOverDialog.show();
+            }
         }
     };
 

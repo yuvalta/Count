@@ -52,7 +52,6 @@ public class MainMenuFragment extends Fragment {
         isPressedBackTwice = false;
 
         topBar = getActivity().findViewById(R.id.top_bar);
-//        topBar.setBackgroundResource(R.color.background_gradient_end);
 
         timerTV = getActivity().findViewById(R.id.timerTV);
         pointsTV = getActivity().findViewById(R.id.pointsTV);

@@ -18,7 +18,7 @@ public class DifficultyOfGame {
     private int LEVEL_12 = 750;
     private int LEVEL_13 = 700;
     private int LEVEL_14 = 650;
-//    private int LEVEL_15 = 500;
+    private int LEVEL_15 = 500;
 //    private int LEVEL_16 = 500;
 //    private int LEVEL_17 = 500;
 //    private int LEVEL_18 = 500;
@@ -40,11 +40,11 @@ public class DifficultyOfGame {
                 duration = LEVEL_1;
                 break;
             case 1:
-                probability = 10;
+                probability = 40;
                 duration = LEVEL_1;
                 break;
             case 2:
-                probability = 20;
+                probability = 40;
                 duration = LEVEL_2;
                 break;
             case 3:
@@ -52,7 +52,7 @@ public class DifficultyOfGame {
                 duration = LEVEL_3;
                 break;
             case 4:
-                probability = 50;
+                probability = 60;
                 duration = LEVEL_4;
                 break;
             case 5:
@@ -60,7 +60,7 @@ public class DifficultyOfGame {
                 duration = LEVEL_5;
                 break;
             case 6:
-                probability = 60;
+                probability = 65;
                 duration = LEVEL_6;
                 break;
             case 7:
@@ -95,9 +95,13 @@ public class DifficultyOfGame {
                 probability = 90;
                 duration = LEVEL_13;
                 break;
-            default:
+            case 15:
+                probability = 100;
                 duration = LEVEL_14;
                 break;
+            default:
+                probability = 100;
+                duration = LEVEL_15;
         }
     }
 
