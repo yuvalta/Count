@@ -1,65 +1,48 @@
 package com.example.one2ten;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.rewarded.RewardedAd;
 //import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
-import java.util.ArrayList;
-import java.util.Random;
 
-
-public class InfinityModeFragment extends Fragment {
+public class StopWatchModeFragment extends Fragment {
 
     private int MAX_BUTTON = 31;
     private int MIN_BUTTON = 0;
-    private int DURATION_OF_ALPHA = 3000;
-    private int INFINITY = 1;
-
+    int STOP_WATCH = 0;
 
     private int currentTileRandomPlace;
     private int randomColor;
-    private int probability;
     private int numberToShowOnButton = 1;
-    private int fakeTilePosition = -1;
-    private int highScore;
-    private int secondFakePosition = -1;
+    private long highScoreMilli;
 
-    boolean isMute = false;
+    boolean isMute;
 
-    private SharedPreferences highScoreInfSharedPref;
+    private SharedPreferences bestTimeSharedPref;
 
-    private AnimatorSet mAnimationSet;
-
-    private LinearLayout topBar;
-    private LinearLayout timerLinearLayout;
-
-    private TextView pointsTV;
     private TextView currentScoreTV;
     private TextView timeInfo;
     private TextView highScoreInfo;
 
     private ImageButton backToMenu;
-
-    private boolean isFirstClick;
 
     private Chronometer stopWatch;
 
@@ -79,7 +62,7 @@ public class InfinityModeFragment extends Fragment {
 
     ArrayList<TextView> textViewArrayList = new ArrayList<TextView>(ids.length);
 
-    public InfinityModeFragment(boolean isMute) {
+    public StopWatchModeFragment(boolean isMute) {
         this.isMute = isMute;
     }
 
@@ -106,27 +89,29 @@ public class InfinityModeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_infinity_mode, container, false);
+        View view = inflater.inflate(R.layout.fragment_1to100_mode, container, false);
 
         clickMp = MediaPlayer.create(getContext(), R.raw.level_up);
         levelUpMp = MediaPlayer.create(getContext(), R.raw.click);
 
-        highScoreInfSharedPref = this.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
-        highScore = highScoreInfSharedPref.getInt("highScoreInfinity", 0000);
-
-        isFirstClick = true;
+        bestTimeSharedPref = this.getActivity().getSharedPreferences("bestTimeStopWatch", Context.MODE_PRIVATE);
+        highScoreMilli = (Long) bestTimeSharedPref.getLong("bestTimeStopWatch", 1);
 
         bindGridViews(view);
 
         setTopBar(View.VISIBLE);
 
-//        stopper = new StopWatch(true, stopWatch); // class that it's a stop watch
+        stopper = new StopWatch(true, stopWatch); // class that it's a stop watch
 
         currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
         backToMenu.setOnClickListener(ReturnHomeListener);
 
         createTile(currentTileRandomPlace, 1, numberToShowOnButton++);
+
+//        SharedPreferences.Editor editor = bestTimeSharedPref.edit();
+//        editor.putInt("bestTimeStopWatch", 1000000);
+//        editor.commit();
 
         return view;
     }
@@ -144,85 +129,48 @@ public class InfinityModeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    if (mAnimationSet != null) {
-                        mAnimationSet.removeAllListeners();
-                        mAnimationSet.end();
-                        mAnimationSet.cancel();
-                    }
-
                     tileCleanup(currentTileRandomPlace);
 
-                    if (fakeTilePosition >= 0) {
-                        tileCleanup(fakeTilePosition);
-                    }
-                    if (secondFakePosition >= 0) {
-                        tileCleanup(secondFakePosition);
-                    }
+                    if (numberToShowOnButton <= 10) {
 
-                    Object tapOfButtonPressed = view.getTag();
+                        Object tapOfButtonPressed = view.getTag();
 
-                    if (tapOfButtonPressed.equals(String.valueOf(currentTileRandomPlace))) {
+                        if (tapOfButtonPressed.equals(String.valueOf(currentTileRandomPlace))) {
 
-                        if (!isMute) {
-                            makeSounds();
-                        }
-
-                        DifficultyOfGame difficultyOfGame = new DifficultyOfGame(numberToShowOnButton);
-                        DURATION_OF_ALPHA = difficultyOfGame.getDuration();
-                        probability = difficultyOfGame.getProbability();
-
-//                        stopper.startStopWatch();
-
-                        currentScoreTV.setText(String.valueOf(numberToShowOnButton - 1)); // set current highScoreInfinity
-
-                        if (numberToShowOnButton > highScore) { // new high highScoreInfinity!!!
-                            pointsTV.setText(String.valueOf(numberToShowOnButton - 1));
-                        }
-
-                        currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
-                        randomColor = generateRandomNumber(colorsArray.length - 1, 0);
-
-                        fadeOutButton(currentTileRandomPlace);
-
-                        createTile(currentTileRandomPlace, randomColor, numberToShowOnButton++);
-
-                        fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
-
-                        if (generateRandomNumber(100, 0) < probability && fakeTilePosition != currentTileRandomPlace) {
-
-                            createTile(fakeTilePosition, numberToShowOnButton % colorsArray.length,
-                                    generateRandomNumber(numberToShowOnButton / 2, 1)); // create fake tile with some arbitrary color
-
-                            secondFakePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
-                            if (generateRandomNumber(100, 0) < (probability / 2) && secondFakePosition != fakeTilePosition) {
-
-                                createTile(secondFakePosition, currentTileRandomPlace % colorsArray.length,
-                                        generateRandomNumber(numberToShowOnButton / 2, 1));
-                            } else {
-                                secondFakePosition = -1;
+                            if (!isMute) {
+                                makeSounds();
                             }
 
+                            stopper.startStopWatch();
+
+                            currentScoreTV.setText(String.valueOf(numberToShowOnButton - 1)); // set current highScoreInfinity
+
+                            if (stopper.getTime() < highScoreMilli) {
+                                // new high highScoreInfinity!!!
+                            }
+
+                            currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+                            randomColor = generateRandomNumber(colorsArray.length - 1, 0);
+
+                            createTile(currentTileRandomPlace, randomColor, numberToShowOnButton++);
                         } else {
-                            fakeTilePosition = -1;
+                            createTile(currentTileRandomPlace, randomColor, numberToShowOnButton - 1);
                         }
 
-
                     } else {
-                        loseGame(true);
+                        winGame(true);
                     }
                 }
             });
         }
     }
 
-    public void loseGame(boolean isPressedReturn) {
+    public void winGame(boolean isPressedReturn) {
 
-        if (mAnimationSet != null) {
-            mAnimationSet.removeAllListeners();
-            mAnimationSet.end();
-            mAnimationSet.cancel();
-        }
-//        stopper.stopStopWatch();
+        Log.d("aaa", String.valueOf(stopper.getTime()));
+        Log.d("bbb", String.valueOf(highScoreMilli));
+
+        stopper.stopStopWatch();
 
         currentScoreTV.setText("0");
 
@@ -230,16 +178,15 @@ public class InfinityModeFragment extends Fragment {
         levelUpMp.release();
 
         if (isPressedReturn) {
-            GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this,
-                    numberToShowOnButton - 1, mAnimationSet, INFINITY);
+            GameOverDialog gameOverDialog = new GameOverDialog(getContext(), StopWatchModeFragment.this, stopper.getTime(), STOP_WATCH, stopper);
             gameOverDialog.setCancelable(false);
             gameOverDialog.setCanceledOnTouchOutside(false);
             gameOverDialog.show();
             gameOverDialog.resumeButton.setVisibility(View.INVISIBLE);
 
-            if (numberToShowOnButton - 1 > highScore) { // new high highScoreInfinity!!!
-                SharedPreferences.Editor editor = highScoreInfSharedPref.edit();
-                editor.putInt("highScoreInfinity", numberToShowOnButton - 1);
+            if (stopper.getTime() < highScoreMilli) { // new high highScoreInfinity!!!
+                SharedPreferences.Editor editor = bestTimeSharedPref.edit();
+                editor.putLong("bestTimeStopWatch", stopper.getTime());
                 editor.commit();
             }
         } else {
@@ -247,7 +194,6 @@ public class InfinityModeFragment extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         }
-
     }
 
     public void tileCleanup(int position) {
@@ -270,40 +216,14 @@ public class InfinityModeFragment extends Fragment {
         }
     }
 
-
-    public void fadeOutButton(final int currentPlaceOfButton) {
-
-        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(textViewArrayList.get(currentPlaceOfButton), "alpha", 1f, 0f);
-        fadeOut.setDuration(DURATION_OF_ALPHA);
-
-        mAnimationSet = new AnimatorSet();
-
-        mAnimationSet.play(fadeOut);
-
-        mAnimationSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-
-                loseGame(false);
-
-            }
-        });
-        mAnimationSet.start();
-    }
-
     public void bindGridViews(View view) {
 
         // topBar binding
-        topBar = getActivity().findViewById(R.id.top_bar);
-        timerLinearLayout = getActivity().findViewById(R.id.timer_ll);
-        pointsTV = getActivity().findViewById(R.id.pointsTV);
         backToMenu = getActivity().findViewById(R.id.back_to_menu_btn);
         currentScoreTV = getActivity().findViewById(R.id.current_scoreTV);
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
+        stopWatch = getActivity().findViewById(R.id.timerTV);
 
-        pointsTV.setText(String.valueOf(highScore));
-        timerLinearLayout.getLayoutParams().width = 110; // TODO - fix this static assignment
         currentScoreTV.setText("0"); // set current highScoreInfinity
 
         initTextViews(view);
@@ -317,7 +237,7 @@ public class InfinityModeFragment extends Fragment {
 
     private void setTopBar(int showTopBar) {
 
-        pointsTV.setVisibility(showTopBar);
+        stopWatch.setVisibility(showTopBar);
         currentScoreTV.setVisibility(showTopBar);
         backToMenu.setVisibility(showTopBar);
         highScoreInfo.setVisibility(showTopBar);
@@ -332,15 +252,13 @@ public class InfinityModeFragment extends Fragment {
     private View.OnClickListener ReturnHomeListener = new View.OnClickListener() {
         public void onClick(View v) {
 
-            if (numberToShowOnButton != 2) {
-                mAnimationSet.pause();
+            stopper.pauseStopWatch();
 
-                GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this,
-                        numberToShowOnButton - 1, mAnimationSet, INFINITY);
-                gameOverDialog.setCancelable(false);
-                gameOverDialog.setCanceledOnTouchOutside(false);
-                gameOverDialog.show();
-            }
+            GameOverDialog gameOverDialog = new GameOverDialog(getContext(), StopWatchModeFragment.this, numberToShowOnButton - 1, STOP_WATCH, stopper);
+            gameOverDialog.setCancelable(false);
+            gameOverDialog.setCanceledOnTouchOutside(false);
+            gameOverDialog.show();
+
         }
     };
 

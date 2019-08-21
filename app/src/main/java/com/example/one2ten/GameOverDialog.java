@@ -1,40 +1,54 @@
 package com.example.one2ten;
 
 import android.animation.AnimatorSet;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 public class GameOverDialog extends Dialog {
+
+    int INFINITY = 1;
+    int STOP_WATCH = 0;
     Button resumeButton;
     Button returnButton;
     Context context;
-    InfinityModeFragment activity;
+
+    InfinityModeFragment infinityModeFragment;
+    StopWatchModeFragment stopWatchModeFragment;
 
     TextView yourScore;
     TextView bestScore;
     TextView highScoreMessage;
 
     AnimatorSet animatorSet;
+    StopWatch stopper;
 
-    public boolean returnOrResume; // return -> true, resume -> false
+    public int gameMode;
 
-    int score;
+    int highScoreInfinity;
+    long stopWatchTime;
 
-    public GameOverDialog(Context context, InfinityModeFragment activity, int score, AnimatorSet animatorSet) {
+    public GameOverDialog(Context context, InfinityModeFragment infinityModeFragment, int score, AnimatorSet animatorSet, int gameMode) {
         super(context);
         this.context = context;
-        this.activity = activity;
-        this.score = score;
+        this.infinityModeFragment = infinityModeFragment;
+        this.highScoreInfinity = score;
         this.animatorSet = animatorSet;
+        this.gameMode = gameMode;
+    }
+
+    public GameOverDialog(Context context, StopWatchModeFragment stopWatchModeFragment, long time, int gameMode, StopWatch stopper) {
+        super(context);
+        this.context = context;
+        this.stopWatchModeFragment = stopWatchModeFragment;
+        this.stopWatchTime = time;
+        this.gameMode = gameMode;
+        this.stopper = stopper;
     }
 
     @Override
@@ -48,28 +62,50 @@ public class GameOverDialog extends Dialog {
         bestScore = findViewById(R.id.high_score_game_over_TV);
         highScoreMessage = findViewById(R.id.high_score_message);
 
-        yourScore.setText(String.valueOf(score - 1));
+        SharedPreferences infSharedPref = null;
+        SharedPreferences stopWatchSharedPref = null;
+        int currentHighScore = 0, currentBestTime = 0;
 
-        SharedPreferences highScoreInfSharedPref = activity.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
+        if (gameMode == INFINITY) {
+            yourScore.setText(String.valueOf(highScoreInfinity - 1));
+            infSharedPref = infinityModeFragment.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
+            currentHighScore = (infSharedPref.getInt("highScoreInfinity", 0000));
 
-        int currentHighScore = (highScoreInfSharedPref.getInt("highScoreInfinity", 0000));
-
-        if (highScoreInfSharedPref.getInt("highScoreInfinity", 0000) == 0) {
-            bestScore.setText((String.valueOf(highScoreInfSharedPref.getInt("highScoreInfinity", 0000))));
-        } else {
-
-            if (score > currentHighScore) { // new high score
-                highScoreMessage.setVisibility(View.VISIBLE);
+            if (infSharedPref.getInt("highScoreInfinity", 0000) == 0) {
+                bestScore.setText((String.valueOf(infSharedPref.getInt("highScoreInfinity", 0000))));
+            } else {
+                if (highScoreInfinity > currentHighScore) { // new high highScoreInfinity
+                    highScoreMessage.setVisibility(View.VISIBLE);
+                    bestScore.setText((String.valueOf(infSharedPref.getInt("highScoreInfinity", 0000) - 1)));
+                }
             }
-            bestScore.setText((String.valueOf(highScoreInfSharedPref.getInt("highScoreInfinity", 0000) - 1)));
 
+        } else if (gameMode == STOP_WATCH) {
+            yourScore.setText(String.valueOf(stopWatchTime));
+            stopWatchSharedPref = stopWatchModeFragment.getActivity().getSharedPreferences("bestTimeStopWatch", Context.MODE_PRIVATE);
+            currentBestTime = (stopWatchSharedPref.getInt("bestTimeStopWatch", 0000));
+
+            if (stopWatchSharedPref.getInt("bestTimeStopWatch", 0000) == 0) {
+                bestScore.setText((String.valueOf(stopWatchSharedPref.getInt("bestTimeStopWatch", 0000))));
+            } else {
+
+                if (stopWatchTime < currentBestTime) {
+                    highScoreMessage.setVisibility(View.VISIBLE);
+                    bestScore.setText((String.valueOf(stopWatchSharedPref.getInt("bestTimeStopWatch", 0000) - 1)));
+                }
+            }
         }
 
         resumeButton = findViewById(R.id.resume_button);
         resumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                animatorSet.resume();
+                if (gameMode == INFINITY) {
+                    animatorSet.resume();
+                }
+                else {
+                    stopper.resumeStopWatch();
+                }
                 highScoreMessage.setVisibility(View.INVISIBLE);
                 dismiss();
             }
@@ -80,7 +116,11 @@ public class GameOverDialog extends Dialog {
             @Override
             public void onClick(View view) {
 
-                activity.loseGame(false);
+                if (gameMode == INFINITY) {
+                    infinityModeFragment.loseGame(false);
+                } else if (gameMode == STOP_WATCH) {
+                    stopWatchModeFragment.winGame(false);
+                }
                 highScoreMessage.setVisibility(View.INVISIBLE);
                 dismiss();
             }

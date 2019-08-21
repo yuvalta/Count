@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public SharedPreferences highScoreInfSharedPref;
+    public SharedPreferences bestTimeSharedPref;
 
 
     @Override
@@ -37,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         highScoreInfSharedPref = getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
+        bestTimeSharedPref = getSharedPreferences("bestTimeStopWatch", Context.MODE_PRIVATE);
+
+//        SharedPreferences.Editor editor = bestTimeSharedPref.edit();
+//        editor.clear();
+//        editor.commit();
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();

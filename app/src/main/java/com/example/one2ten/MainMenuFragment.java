@@ -105,6 +105,10 @@ public class MainMenuFragment extends Fragment {
             switch (v.getId()) {
                 case R.id.timer_mode_button:
 
+                    StopWatchModeFragment stopWatchModeFragment = new StopWatchModeFragment(isMute);
+                    fragmentTransaction.add(R.id.frame_layout_for_fragments, stopWatchModeFragment).addToBackStack("TimerFragment");
+                    fragmentTransaction.commit();
+
                     break;
 
                 case R.id.infinity_mode_button:
