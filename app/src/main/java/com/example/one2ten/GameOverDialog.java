@@ -14,6 +14,10 @@ public class GameOverDialog extends Dialog {
 
     int INFINITY = 1;
     int STOP_WATCH = 0;
+
+    int currentHighScore = 0;
+    int currentBestTime = 0;
+
     Button resumeButton;
     Button returnButton;
     Context context;
@@ -30,14 +34,14 @@ public class GameOverDialog extends Dialog {
 
     public int gameMode;
 
-    int highScoreInfinity;
+    int yourHighScoreInfinity;
     long stopWatchTime;
 
     public GameOverDialog(Context context, InfinityModeFragment infinityModeFragment, int score, AnimatorSet animatorSet, int gameMode) {
         super(context);
         this.context = context;
         this.infinityModeFragment = infinityModeFragment;
-        this.highScoreInfinity = score;
+        this.yourHighScoreInfinity = score;
         this.animatorSet = animatorSet;
         this.gameMode = gameMode;
     }
@@ -64,21 +68,23 @@ public class GameOverDialog extends Dialog {
 
         SharedPreferences infSharedPref = null;
         SharedPreferences stopWatchSharedPref = null;
-        int currentHighScore = 0, currentBestTime = 0;
 
         if (gameMode == INFINITY) {
-            yourScore.setText(String.valueOf(highScoreInfinity - 1));
-            infSharedPref = infinityModeFragment.getActivity().getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
-            currentHighScore = (infSharedPref.getInt("highScoreInfinity", 0000));
+            yourScore.setText(String.valueOf(yourHighScoreInfinity));
+            infSharedPref = infinityModeFragment.getActivity().getSharedPreferences("yourHighScoreInfinity", Context.MODE_PRIVATE);
 
-            if (infSharedPref.getInt("highScoreInfinity", 0000) == 0) {
-                bestScore.setText((String.valueOf(infSharedPref.getInt("highScoreInfinity", 0000))));
+            currentHighScore = (infSharedPref.getInt("yourHighScoreInfinity", 0000));
+
+//            if (infSharedPref.getInt("yourHighScoreInfinity", 0000) == 0) {
+//                bestScore.setText((String.valueOf(infSharedPref.getInt("yourHighScoreInfinity", 0000))));
+//            } else {
+            if (yourHighScoreInfinity > currentHighScore) { // new high yourHighScoreInfinity
+                highScoreMessage.setVisibility(View.VISIBLE);
+                bestScore.setText(String.valueOf(yourHighScoreInfinity));
             } else {
-                if (highScoreInfinity > currentHighScore) { // new high highScoreInfinity
-                    highScoreMessage.setVisibility(View.VISIBLE);
-                    bestScore.setText((String.valueOf(infSharedPref.getInt("highScoreInfinity", 0000) - 1)));
-                }
+                bestScore.setText(String.valueOf(currentHighScore));
             }
+//            }
 
         } else if (gameMode == STOP_WATCH) {
             yourScore.setText(String.valueOf(stopWatchTime));
@@ -88,10 +94,11 @@ public class GameOverDialog extends Dialog {
             if (stopWatchSharedPref.getInt("bestTimeStopWatch", 0000) == 0) {
                 bestScore.setText((String.valueOf(stopWatchSharedPref.getInt("bestTimeStopWatch", 0000))));
             } else {
-
                 if (stopWatchTime < currentBestTime) {
                     highScoreMessage.setVisibility(View.VISIBLE);
                     bestScore.setText((String.valueOf(stopWatchSharedPref.getInt("bestTimeStopWatch", 0000) - 1)));
+                } else {
+                    bestScore.setText(currentBestTime);
                 }
             }
         }
@@ -102,8 +109,7 @@ public class GameOverDialog extends Dialog {
             public void onClick(View view) {
                 if (gameMode == INFINITY) {
                     animatorSet.resume();
-                }
-                else {
+                } else {
                     stopper.resumeStopWatch();
                 }
                 highScoreMessage.setVisibility(View.INVISIBLE);
@@ -117,7 +123,7 @@ public class GameOverDialog extends Dialog {
             public void onClick(View view) {
 
                 if (gameMode == INFINITY) {
-                    infinityModeFragment.loseGame(false);
+                    infinityModeFragment.closeGameOverDialog();
                 } else if (gameMode == STOP_WATCH) {
                     stopWatchModeFragment.winGame(false);
                 }

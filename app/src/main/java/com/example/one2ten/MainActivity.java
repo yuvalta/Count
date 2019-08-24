@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        highScoreInfSharedPref = getSharedPreferences("highScoreInfinity", Context.MODE_PRIVATE);
+        highScoreInfSharedPref = getSharedPreferences("yourHighScoreInfinity", Context.MODE_PRIVATE);
         bestTimeSharedPref = getSharedPreferences("bestTimeStopWatch", Context.MODE_PRIVATE);
 
 //        SharedPreferences.Editor editor = bestTimeSharedPref.edit();

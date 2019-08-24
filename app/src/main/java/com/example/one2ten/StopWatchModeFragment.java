@@ -143,10 +143,10 @@ public class StopWatchModeFragment extends Fragment {
 
                             stopper.startStopWatch();
 
-                            currentScoreTV.setText(String.valueOf(numberToShowOnButton - 1)); // set current highScoreInfinity
+                            currentScoreTV.setText(String.valueOf(numberToShowOnButton - 1)); // set current yourHighScoreInfinity
 
                             if (stopper.getTime() < highScoreMilli) {
-                                // new high highScoreInfinity!!!
+                                // new high yourHighScoreInfinity!!!
                             }
 
                             currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
@@ -184,7 +184,7 @@ public class StopWatchModeFragment extends Fragment {
             gameOverDialog.show();
             gameOverDialog.resumeButton.setVisibility(View.INVISIBLE);
 
-            if (stopper.getTime() < highScoreMilli) { // new high highScoreInfinity!!!
+            if (stopper.getTime() < highScoreMilli) { // new high yourHighScoreInfinity!!!
                 SharedPreferences.Editor editor = bestTimeSharedPref.edit();
                 editor.putLong("bestTimeStopWatch", stopper.getTime());
                 editor.commit();
@@ -224,7 +224,7 @@ public class StopWatchModeFragment extends Fragment {
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
         stopWatch = getActivity().findViewById(R.id.timerTV);
 
-        currentScoreTV.setText("0"); // set current highScoreInfinity
+        currentScoreTV.setText("0"); // set current yourHighScoreInfinity
 
         initTextViews(view);
     }
