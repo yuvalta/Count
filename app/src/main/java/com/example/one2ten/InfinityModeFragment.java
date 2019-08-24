@@ -185,7 +185,7 @@ public class InfinityModeFragment extends Fragment {
 
                         fadeOutButton(currentTileRandomPlace);
 
-                        createTile(currentTileRandomPlace, 0, numberToShowOnButton++);
+                        createTile(currentTileRandomPlace, numberToShowOnButton % colorsArray.length, numberToShowOnButton++);
 
                         fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
