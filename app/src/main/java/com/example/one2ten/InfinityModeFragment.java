@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 //import com.google.android.gms.ads.AdRequest;
@@ -58,6 +60,8 @@ public class InfinityModeFragment extends Fragment {
     private TextView currentScoreTV;
     private TextView timeInfo;
     private TextView highScoreInfo;
+
+    private AnimatorListenerAdapter animatorListenerAdapter;
 
     private ImageButton backToMenu;
 
@@ -126,7 +130,7 @@ public class InfinityModeFragment extends Fragment {
 
         backToMenu.setOnClickListener(ReturnHomeListener);
 
-        createTile(currentTileRandomPlace, 1, numberToShowOnButton++);
+        createTile(currentTileRandomPlace, 1, numberToShowOnButton++, 0);
 
         return view;
     }
@@ -135,7 +139,7 @@ public class InfinityModeFragment extends Fragment {
         for (int i = 0; i < ids.length; i++) {
             TextView currentTextView = view.findViewById(ids[i]);
             textViewArrayList.add(currentTextView);
-            textViewArrayList.get(i).getBackground().setTint(getResources().getColor(R.color.transparent));
+//            textViewArrayList.get(i).getBackground().setTint(getResources().getColor(R.color.transparent));
         }
 
         for (int i = 0; i < ids.length; i++) { // set listeners to all buttons
@@ -146,6 +150,7 @@ public class InfinityModeFragment extends Fragment {
 
                     if (mAnimationSet != null) {
                         mAnimationSet.removeAllListeners();
+//                        mAnimationSet.removeListener();
                         mAnimationSet.end();
                         mAnimationSet.cancel();
                     }
@@ -185,7 +190,7 @@ public class InfinityModeFragment extends Fragment {
 
                         fadeOutButton(currentTileRandomPlace);
 
-                        createTile(currentTileRandomPlace, numberToShowOnButton % colorsArray.length, numberToShowOnButton++);
+                        createTile(currentTileRandomPlace, numberToShowOnButton % colorsArray.length, numberToShowOnButton++, 0);
 
                         fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
@@ -196,14 +201,14 @@ public class InfinityModeFragment extends Fragment {
                         if (generateRandomNumber(100, 0) <= probability /*&& fakeTilePosition != currentTileRandomPlace*/) {
 
                             createTile(fakeTilePosition, numberToShowOnButton % colorsArray.length,
-                                    generateRandomNumber(numberToShowOnButton / 2, 1)); // create fake tile with some arbitrary color
+                                    generateRandomNumber(numberToShowOnButton / 2, 1), 1); // create fake tile with some arbitrary color
 
                             secondFakePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON); // second fake tile
                             if (generateRandomNumber(100, 0) <= (probability) && secondFakePosition != fakeTilePosition
                                     && thirdFakePosition != currentTileRandomPlace) {
 
                                 createTile(secondFakePosition, numberToShowOnButton % colorsArray.length,
-                                        generateRandomNumber(numberToShowOnButton / 2, 1));
+                                        generateRandomNumber(numberToShowOnButton / 2, 1), 2);
                             } else {
                                 secondFakePosition = -1;
                             }
@@ -213,7 +218,7 @@ public class InfinityModeFragment extends Fragment {
                                     && thirdFakePosition != secondFakePosition && thirdFakePosition != currentTileRandomPlace) {
 
                                 createTile(thirdFakePosition, numberToShowOnButton % colorsArray.length,
-                                        generateRandomNumber(numberToShowOnButton / 2, 1));
+                                        generateRandomNumber(numberToShowOnButton / 2, 1), 3);
                             } else {
                                 thirdFakePosition = -1;
                             }
@@ -250,19 +255,6 @@ public class InfinityModeFragment extends Fragment {
         gameOverDialog.setCanceledOnTouchOutside(false);
         gameOverDialog.show();
         gameOverDialog.resumeButton.setVisibility(View.INVISIBLE);
-
-//        if (numberToShowOnButton - 1 > highScore) { // new high yourHighScoreInfinity!!!
-//            SharedPreferences.Editor editor = highScoreInfSharedPref.edit();
-//            editor.putInt("yourHighScoreInfinity", numberToShowOnButton - 1);
-//            editor.commit();
-//
-//
-//            if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
-//                getActivity().getSupportFragmentManager().popBackStack();
-//            }
-//
-//
-//        }
     }
 
     public void closeGameOverDialog() {
@@ -277,14 +269,15 @@ public class InfinityModeFragment extends Fragment {
     }
 
     public void tileCleanup(int position) {
-        textViewArrayList.get(position).getBackground().setTint(getResources().getColor(R.color.transparent));
+//        textViewArrayList.get(position).getBackground().setTint(getResources().getColor(R.color.transparent));
+        textViewArrayList.get(position).setBackground(getResources().getDrawable(R.drawable.normal_style));
         textViewArrayList.get(position).setText("");
     }
 
-    public void createTile(int position, int randomColor, int numberToShowOnButton) {
-        Log.d("Createtile ", String.valueOf(position));
+    public void createTile(final int position, final int randomColor, final int numberToShowOnButton, final int i) {
+
         textViewArrayList.get(position).getBackground().setTint(getResources().getColor(colorsArray[randomColor]));
-        textViewArrayList.get(position).setText(String.valueOf(numberToShowOnButton++));
+        textViewArrayList.get(position).setText(String.valueOf(numberToShowOnButton));
         textViewArrayList.get(position).setTextSize(30);
     }
 
@@ -316,6 +309,13 @@ public class InfinityModeFragment extends Fragment {
 
             }
         });
+
+//        mAnimationSet.addListener(animatorListenerAdapter);
+//
+//        animatorListenerAdapter.onAnimationEnd(mAnimationSet) {
+//
+//            loseGame(false);
+//        };
         mAnimationSet.start();
     }
 

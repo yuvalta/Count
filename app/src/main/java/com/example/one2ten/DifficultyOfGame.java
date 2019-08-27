@@ -19,6 +19,23 @@ public class DifficultyOfGame {
     private int LEVEL_13 = 700;
     private int LEVEL_14 = 650;
     private int LEVEL_15 = 500;
+
+//    private int LEVEL_1 = 6000;// test
+//    private int LEVEL_2 = 6000;
+//    private int LEVEL_3 = 6000;
+//    private int LEVEL_4 = 6000;
+//    private int LEVEL_5 = 6000;
+//    private int LEVEL_6 = 6000;
+//    private int LEVEL_7 = 6000;
+//    private int LEVEL_8 = 6000;
+//    private int LEVEL_9 = 6000;
+//    private int LEVEL_10 = 6000;
+//    private int LEVEL_11 = 6000;
+//    private int LEVEL_12 = 6000;
+//    private int LEVEL_13 = 6000;
+//    private int LEVEL_14 = 6000;
+//    private int LEVEL_15 = 6000;
+
 //    private int LEVEL_16 = 500;
 //    private int LEVEL_17 = 500;
 //    private int LEVEL_18 = 500;
