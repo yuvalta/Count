@@ -51,7 +51,10 @@ public class InfinityModeFragment extends Fragment {
 
     private SharedPreferences highScoreInfSharedPref;
 
-    private AnimatorSet mAnimationSet;
+    private AnimatorSet mAnimationSet0;
+    private AnimatorSet mAnimationSet1;
+    private AnimatorSet mAnimationSet2;
+    private AnimatorSet mAnimationSet3;
 
     private LinearLayout topBar;
     private LinearLayout timerLinearLayout;
@@ -136,8 +139,7 @@ public class InfinityModeFragment extends Fragment {
             TextView currentTextView = view.findViewById(ids[i]);
             textViewArrayList.add(currentTextView);
             textViewArrayList.get(i).getBackground().setTint(getResources().getColor(R.color.transparent));
-//            textViewArrayList.get(i).setBackgroundResource(android.R.color.transparent);
-//            textViewArrayList.get(i).setBackground(getResources().getDrawable(R.drawable.normal_style));
+
         }
 
         for (int i = 0; i < ids.length; i++) { // set listeners to all buttons
@@ -146,12 +148,26 @@ public class InfinityModeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-//                    if (mAnimationSet != null) {
-//                        mAnimationSet.removeAllListeners();
-////                        mAnimationSet.removeListener(animatorListenerAdapter);
-//                        mAnimationSet.end();
-//                        mAnimationSet.cancel();
-//                    }
+                    if (mAnimationSet0 != null) {
+                        mAnimationSet0.removeAllListeners();
+                        mAnimationSet0.end();
+                        mAnimationSet0.cancel();
+                    }
+                    if (mAnimationSet1 != null) {
+                        mAnimationSet1.removeAllListeners();
+                        mAnimationSet1.end();
+                        mAnimationSet1.cancel();
+                    }
+                    if (mAnimationSet2 != null) {
+                        mAnimationSet2.removeAllListeners();
+                        mAnimationSet2.end();
+                        mAnimationSet2.cancel();
+                    }
+                    if (mAnimationSet3 != null) {
+                        mAnimationSet3.removeAllListeners();
+                        mAnimationSet3.end();
+                        mAnimationSet3.cancel();
+                    }
 
                     tileCleanup(currentTileRandomPlace);
 
@@ -186,9 +202,9 @@ public class InfinityModeFragment extends Fragment {
                         currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
                         randomColor = generateRandomNumber(colorsArray.length - 1, 0);
 
-//                        fadeOutButton(currentTileRandomPlace);
+                        mAnimationSet0 = fadeOutButton(currentTileRandomPlace, mAnimationSet0);
 
-                        createTile(currentTileRandomPlace, numberToShowOnButton % colorsArray.length, numberToShowOnButton++);
+                        createTile(currentTileRandomPlace, randomColor, numberToShowOnButton++);
 
                         fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
@@ -202,12 +218,17 @@ public class InfinityModeFragment extends Fragment {
                             createTile(fakeTilePosition, (numberToShowOnButton + 1) % colorsArray.length,
                                     generateRandomNumber(numberToShowOnButton / 2, 1)); // create fake tile with some arbitrary color
 
+                            mAnimationSet1 = fadeOutButton(fakeTilePosition, mAnimationSet1);
+
                             secondFakePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON); // second fake tile
                             if (generateRandomNumber(100, 0) <= (probability) && secondFakePosition != fakeTilePosition
                                     && thirdFakePosition != currentTileRandomPlace) {
 
                                 createTile(secondFakePosition, (numberToShowOnButton + 2) % colorsArray.length,
                                         generateRandomNumber(numberToShowOnButton / 2, 1));
+
+                                mAnimationSet2 = fadeOutButton(secondFakePosition, mAnimationSet2);
+
                             } else {
                                 secondFakePosition = -1;
                             }
@@ -218,6 +239,9 @@ public class InfinityModeFragment extends Fragment {
 
                                 createTile(thirdFakePosition, (numberToShowOnButton + 3) % colorsArray.length,
                                         generateRandomNumber(numberToShowOnButton / 2, 1));
+
+                                mAnimationSet3 = fadeOutButton(thirdFakePosition, mAnimationSet3);
+
                             } else {
                                 thirdFakePosition = -1;
                             }
@@ -237,10 +261,25 @@ public class InfinityModeFragment extends Fragment {
 
     public void loseGame(boolean isPressedReturn) {
 
-        if (mAnimationSet != null) {
-            mAnimationSet.removeAllListeners();
-            mAnimationSet.end();
-            mAnimationSet.cancel();
+        if (mAnimationSet0 != null) {
+            mAnimationSet0.removeAllListeners();
+            mAnimationSet0.end();
+            mAnimationSet0.cancel();
+        }
+        if (mAnimationSet1 != null) {
+            mAnimationSet1.removeAllListeners();
+            mAnimationSet1.end();
+            mAnimationSet1.cancel();
+        }
+        if (mAnimationSet2 != null) {
+            mAnimationSet2.removeAllListeners();
+            mAnimationSet2.end();
+            mAnimationSet2.cancel();
+        }
+        if (mAnimationSet3 != null) {
+            mAnimationSet3.removeAllListeners();
+            mAnimationSet3.end();
+            mAnimationSet3.cancel();
         }
 
         currentScoreTV.setText("0");
@@ -249,7 +288,7 @@ public class InfinityModeFragment extends Fragment {
         levelUpMp.release();
 
         GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this,
-                numberToShowOnButton - 2, mAnimationSet, INFINITY);
+                numberToShowOnButton - 2, mAnimationSet0, mAnimationSet1, mAnimationSet2, mAnimationSet3, INFINITY);
         gameOverDialog.setCancelable(false);
         gameOverDialog.setCanceledOnTouchOutside(false);
         gameOverDialog.show();
@@ -293,7 +332,7 @@ public class InfinityModeFragment extends Fragment {
     }
 
 
-    public void fadeOutButton(final int currentPlaceOfButton) {
+    public AnimatorSet fadeOutButton(final int currentPlaceOfButton, AnimatorSet mAnimationSet) {
 
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(textViewArrayList.get(currentPlaceOfButton), "alpha", 1f, 0f);
         fadeOut.setDuration(DURATION_OF_ALPHA);
@@ -308,19 +347,13 @@ public class InfinityModeFragment extends Fragment {
                 super.onAnimationEnd(animation);
 
                 loseGame(false);
-//                mAnimationSet.removeListener(this);
             }
         });
 
-//        mAnimationSet.addListener(animatorListenerAdapter);
-//
-//        mAnimationSet.addListener(animatorListenerAdapter);
-//
-//        animatorListenerAdapter.onAnimationEnd(mAnimationSet) {
-//
-//            loseGame(false);
-//        };
         mAnimationSet.start();
+
+        return mAnimationSet;
+
     }
 
     public void bindGridViews(View view) {
@@ -365,10 +398,21 @@ public class InfinityModeFragment extends Fragment {
         public void onClick(View v) {
 
             if (numberToShowOnButton != 2) {
-                mAnimationSet.pause();
+                if (mAnimationSet0 != null) {
+                    mAnimationSet0.pause();
+                }
+                if (mAnimationSet1 != null) {
+                    mAnimationSet1.pause();
+                }
+                if (mAnimationSet2 != null) {
+                    mAnimationSet2.pause();
+                }
+                if (mAnimationSet3 != null) {
+                    mAnimationSet3.pause();
+                }
 
                 GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this,
-                        numberToShowOnButton - 1, mAnimationSet, INFINITY);
+                        numberToShowOnButton - 1, mAnimationSet0, mAnimationSet1, mAnimationSet2, mAnimationSet3, INFINITY);
                 gameOverDialog.setCancelable(false);
                 gameOverDialog.setCanceledOnTouchOutside(false);
                 gameOverDialog.show();

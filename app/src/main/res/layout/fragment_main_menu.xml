@@ -25,15 +25,17 @@
 
         <Button
             android:id="@+id/timer_mode_button"
-            android:layout_width="match_parent"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/start_button_style"
             android:backgroundTint="@color/menuRed"
+            android:enabled="false"
             android:fontFamily="@font/poiret_family"
             android:gravity="center"
+            android:padding="20dp"
             android:text="@string/timer_mode"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -41,7 +43,7 @@
 
         <Button
             android:id="@+id/infinity_mode_button"
-            android:layout_width="match_parent"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/timer_mode_button"
             android:layout_marginHorizontal="20dp"
@@ -50,32 +52,17 @@
             android:backgroundTint="@color/menuYellow"
             android:fontFamily="@font/poiret_family"
             android:gravity="center"
+            android:padding="20dp"
             android:text="@string/Infinity_mode"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="50sp" />
 
-        <Button
-            android:id="@+id/backward_mode_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/infinity_mode_button"
-            android:layout_marginHorizontal="20dp"
-            android:background="@drawable/start_button_style"
-            android:backgroundTint="@color/SteelBlue"
-            android:fontFamily="@font/poiret_family"
-            android:gravity="center"
-            android:text="@string/backward_mode"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="50sp"
-            android:visibility="invisible"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/backward_mode_button"
-            android:layout_marginTop="80dp"
+            android:layout_below="@id/infinity_mode_button"
+            android:layout_marginTop="50dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -116,7 +103,11 @@
                 android:textSize="30sp"
                 android:visibility="invisible" />
 
+
+
         </LinearLayout>
+
+
 
     </LinearLayout>
 

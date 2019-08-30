@@ -29,7 +29,10 @@ public class GameOverDialog extends Dialog {
     TextView bestScore;
     TextView highScoreMessage;
 
-    AnimatorSet animatorSet;
+    AnimatorSet animatorSet0;
+    AnimatorSet animatorSet1;
+    AnimatorSet animatorSet2;
+    AnimatorSet animatorSet3;
     StopWatch stopper;
 
     public int gameMode;
@@ -37,12 +40,16 @@ public class GameOverDialog extends Dialog {
     int yourHighScoreInfinity;
     long stopWatchTime;
 
-    public GameOverDialog(Context context, InfinityModeFragment infinityModeFragment, int score, AnimatorSet animatorSet, int gameMode) {
+    public GameOverDialog(Context context, InfinityModeFragment infinityModeFragment, int score,
+                          AnimatorSet animatorSet0, AnimatorSet animatorSet1, AnimatorSet animatorSet2, AnimatorSet animatorSet3, int gameMode) {
         super(context);
         this.context = context;
         this.infinityModeFragment = infinityModeFragment;
         this.yourHighScoreInfinity = score;
-        this.animatorSet = animatorSet;
+        this.animatorSet0 = animatorSet0;
+        this.animatorSet1 = animatorSet1;
+        this.animatorSet2 = animatorSet2;
+        this.animatorSet3 = animatorSet3;
         this.gameMode = gameMode;
     }
 
@@ -108,7 +115,18 @@ public class GameOverDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 if (gameMode == INFINITY) {
-                    animatorSet.resume();
+                    if (animatorSet0 != null) {
+                        animatorSet0.resume();
+                    }
+                    if (animatorSet1 != null) {
+                        animatorSet1.resume();
+                    }
+                    if (animatorSet2 != null) {
+                        animatorSet2.resume();
+                    }
+                    if (animatorSet3 != null) {
+                        animatorSet3.resume();
+                    }
                 } else {
                     stopper.resumeStopWatch();
                 }

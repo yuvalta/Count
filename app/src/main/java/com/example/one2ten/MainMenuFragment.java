@@ -28,7 +28,6 @@ public class MainMenuFragment extends Fragment {
 
     Button timerModeButton;
     Button infinityModeButton;
-    Button backwardModeButton;
     ImageButton backToMenu;
 
     ImageButton muteSounds;
@@ -58,7 +57,6 @@ public class MainMenuFragment extends Fragment {
 
         timerModeButton = view.findViewById(R.id.timer_mode_button);
         infinityModeButton = view.findViewById(R.id.infinity_mode_button);
-        backwardModeButton = view.findViewById(R.id.backward_mode_button);
         backToMenu = getActivity().findViewById(R.id.back_to_menu_btn);
 
         timerTV = getActivity().findViewById(R.id.timerTV);
@@ -72,7 +70,6 @@ public class MainMenuFragment extends Fragment {
 
         timerModeButton.setOnClickListener(modeSelectionListener);
         infinityModeButton.setOnClickListener(modeSelectionListener);
-        backwardModeButton.setOnClickListener(modeSelectionListener);
 
         setTopBar(View.INVISIBLE);
 
@@ -116,10 +113,6 @@ public class MainMenuFragment extends Fragment {
                     InfinityModeFragment infinityModeFragment = new InfinityModeFragment(isMute);
                     fragmentTransaction.add(R.id.frame_layout_for_fragments, infinityModeFragment).addToBackStack("TimerFragment");
                     fragmentTransaction.commit();
-
-                    break;
-
-                case R.id.backward_mode_button:
 
                     break;
             }
