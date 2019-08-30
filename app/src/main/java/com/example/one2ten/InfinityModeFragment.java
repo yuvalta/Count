@@ -169,21 +169,19 @@ public class InfinityModeFragment extends Fragment {
                         mAnimationSet3.cancel();
                     }
 
-                    tileCleanup(currentTileRandomPlace);
+                    tileCleanup(currentTileRandomPlace); // clean tile and
 
                     if (fakeTilePosition >= 0) {
-                        tileCleanup(fakeTilePosition);
+                        fakeTilePosition = tileCleanup(fakeTilePosition);
                     }
                     if (secondFakePosition >= 0) {
-                        tileCleanup(secondFakePosition);
+                        secondFakePosition = tileCleanup(secondFakePosition);
                     }
                     if (thirdFakePosition >= 0) {
-                        tileCleanup(thirdFakePosition);
+                        thirdFakePosition = tileCleanup(thirdFakePosition);
                     }
 
-                    Object tapOfButtonPressed = view.getTag();
-
-                    if (tapOfButtonPressed.equals(String.valueOf(currentTileRandomPlace))) {
+                    if (view.getTag().equals(String.valueOf(currentTileRandomPlace))) {
 
                         if (!isMute) {
                             makeSounds();
@@ -193,10 +191,10 @@ public class InfinityModeFragment extends Fragment {
                         DURATION_OF_ALPHA = difficultyOfGame.getDuration();
                         probability = difficultyOfGame.getProbability();
 
-                        currentScoreTV.setText(String.valueOf(numberToShowOnButton - 1)); // set current yourHighScoreInfinity
+                        currentScoreTV.setText(String.valueOf(numberToShowOnButton)); // set current yourHighScoreInfinity
 
                         if (numberToShowOnButton > highScore) { // new high yourHighScoreInfinity!!!
-                            pointsTV.setText(String.valueOf(numberToShowOnButton - 1));
+                            pointsTV.setText(String.valueOf(numberToShowOnButton));
                         }
 
                         currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
@@ -212,19 +210,20 @@ public class InfinityModeFragment extends Fragment {
                             fakeTilePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
                         }
 
-                        if (generateRandomNumber(100, 0) <= probability && fakeTilePosition != currentTileRandomPlace // if all fake tile are in different position
+                        if (generateRandomNumber(100, 0) < probability && fakeTilePosition != currentTileRandomPlace // if all fake tile are in different position
                                 && fakeTilePosition != secondFakePosition && fakeTilePosition != thirdFakePosition) {
 
-                            createTile(fakeTilePosition, (numberToShowOnButton + 1) % colorsArray.length,
+                            createTile(fakeTilePosition, (randomColor + 1) % colorsArray.length,
                                     generateRandomNumber(numberToShowOnButton / 2, 1)); // create fake tile with some arbitrary color
 
                             mAnimationSet1 = fadeOutButton(fakeTilePosition, mAnimationSet1);
 
                             secondFakePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON); // second fake tile
-                            if (generateRandomNumber(100, 0) <= (probability) && secondFakePosition != fakeTilePosition
-                                    && thirdFakePosition != currentTileRandomPlace) {
 
-                                createTile(secondFakePosition, (numberToShowOnButton + 2) % colorsArray.length,
+                            if (generateRandomNumber(100, 0) <= (probability) && secondFakePosition != fakeTilePosition
+                                    && secondFakePosition != currentTileRandomPlace) {
+
+                                createTile(secondFakePosition, (randomColor + 2) % colorsArray.length,
                                         generateRandomNumber(numberToShowOnButton / 2, 1));
 
                                 mAnimationSet2 = fadeOutButton(secondFakePosition, mAnimationSet2);
@@ -234,10 +233,11 @@ public class InfinityModeFragment extends Fragment {
                             }
 
                             thirdFakePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON); // third fake tile
+
                             if (generateRandomNumber(100, 0) <= (probability) && thirdFakePosition != fakeTilePosition
                                     && thirdFakePosition != secondFakePosition && thirdFakePosition != currentTileRandomPlace) {
 
-                                createTile(thirdFakePosition, (numberToShowOnButton + 3) % colorsArray.length,
+                                createTile(thirdFakePosition, (randomColor + 3) % colorsArray.length,
                                         generateRandomNumber(numberToShowOnButton / 2, 1));
 
                                 mAnimationSet3 = fadeOutButton(thirdFakePosition, mAnimationSet3);
@@ -261,26 +261,10 @@ public class InfinityModeFragment extends Fragment {
 
     public void loseGame(boolean isPressedReturn) {
 
-        if (mAnimationSet0 != null) {
-            mAnimationSet0.removeAllListeners();
-            mAnimationSet0.end();
-            mAnimationSet0.cancel();
-        }
-        if (mAnimationSet1 != null) {
-            mAnimationSet1.removeAllListeners();
-            mAnimationSet1.end();
-            mAnimationSet1.cancel();
-        }
-        if (mAnimationSet2 != null) {
-            mAnimationSet2.removeAllListeners();
-            mAnimationSet2.end();
-            mAnimationSet2.cancel();
-        }
-        if (mAnimationSet3 != null) {
-            mAnimationSet3.removeAllListeners();
-            mAnimationSet3.end();
-            mAnimationSet3.cancel();
-        }
+        checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
+        checkAndStopTileAnimation(mAnimationSet1);
+        checkAndStopTileAnimation(mAnimationSet2);
+        checkAndStopTileAnimation(mAnimationSet3);
 
         currentScoreTV.setText("0");
 
@@ -306,20 +290,26 @@ public class InfinityModeFragment extends Fragment {
         }
     }
 
-    public void tileCleanup(int position) {
-//        textViewArrayList.get(position).getBackground().setTint(getResources().getColor(R.color.transparent));
+    public int tileCleanup(int position) {
         textViewArrayList.get(position).setBackgroundResource(android.R.color.transparent);
         textViewArrayList.get(position).setText("");
+        return 0;
     }
 
     public void createTile(final int position, final int randomColor, final int numberToShowOnButton) {
-
-//        textViewArrayList.get(position).setBackgroundResource(colorsArray[randomColor]);
         textViewArrayList.get(position).setBackground(getResources().getDrawable(R.drawable.normal_style));
         textViewArrayList.get(position).getBackground().setTint(getResources().getColor(colorsArray[randomColor]));
         textViewArrayList.get(position).setText(String.valueOf(numberToShowOnButton));
         textViewArrayList.get(position).setTextSize(30);
 
+    }
+
+    public void checkAndStopTileAnimation(AnimatorSet animatorSet) {
+        if (animatorSet != null) {
+            animatorSet.removeAllListeners();
+            animatorSet.end();
+            animatorSet.cancel();
+        }
     }
 
     public void makeSounds() {
@@ -368,7 +358,7 @@ public class InfinityModeFragment extends Fragment {
 
         pointsTV.setText(String.valueOf(highScore));
         timerLinearLayout.getLayoutParams().width = 110; // TODO - fix this static assignment
-        currentScoreTV.setText("0"); // set current yourHighScoreInfinity
+        currentScoreTV.setText("1"); // set current yourHighScoreInfinity
 
         initTextViews(view);
     }
