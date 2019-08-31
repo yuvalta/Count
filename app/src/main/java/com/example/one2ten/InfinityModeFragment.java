@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,24 +13,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Chronometer;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.rewarded.RewardedAd;
 //import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 
 
 public class InfinityModeFragment extends Fragment {
@@ -154,26 +149,14 @@ public class InfinityModeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    if (mAnimationSet0 != null) {
-                        mAnimationSet0.removeAllListeners();
-                        mAnimationSet0.end();
-                        mAnimationSet0.cancel();
+                    if (numberToShowOnButton > 1) {
+                        backToMenu.setImageResource(R.drawable.ic_pause_black_24dp);
                     }
-                    if (mAnimationSet1 != null) {
-                        mAnimationSet1.removeAllListeners();
-                        mAnimationSet1.end();
-                        mAnimationSet1.cancel();
-                    }
-                    if (mAnimationSet2 != null) {
-                        mAnimationSet2.removeAllListeners();
-                        mAnimationSet2.end();
-                        mAnimationSet2.cancel();
-                    }
-                    if (mAnimationSet3 != null) {
-                        mAnimationSet3.removeAllListeners();
-                        mAnimationSet3.end();
-                        mAnimationSet3.cancel();
-                    }
+
+                    checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
+                    checkAndStopTileAnimation(mAnimationSet1);
+                    checkAndStopTileAnimation(mAnimationSet2);
+                    checkAndStopTileAnimation(mAnimationSet3);
 
                     tileCleanup(currentTileRandomPlace); // clean tile and
 
@@ -201,7 +184,9 @@ public class InfinityModeFragment extends Fragment {
 
                         if (numberToShowOnButton > highScore) { // new high yourHighScoreInfinity!!!
                             pointsTV.setText(String.valueOf(numberToShowOnButton));
-                            makeSounds(true);
+                            if (!isMute) { // if we are on quiet mode
+                                makeSounds(true);
+                            }
                             isHighScoreAcheviedForFirstTime = true;
                         }
 
@@ -335,6 +320,10 @@ public class InfinityModeFragment extends Fragment {
 
         if (isHighScore && isHighScoreAcheviedForFirstTime == false) {
             HighScoreYAY.start();
+            Animation highScoreCounterAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
+            Animation highScoreInfoAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
+            pointsTV.startAnimation(highScoreCounterAnimation);
+            highScoreInfo.startAnimation(highScoreInfoAnimation);
         } else {
             if (numberToShowOnButton % 10 == 0) {
                 clickMp.start();
@@ -394,11 +383,14 @@ public class InfinityModeFragment extends Fragment {
 
 
     private void setTopBar(int showTopBar) {
-
         pointsTV.setVisibility(showTopBar);
         currentScoreTV.setVisibility(showTopBar);
         backToMenu.setVisibility(showTopBar);
         highScoreInfo.setVisibility(showTopBar);
+
+        if (numberToShowOnButton == 1) {
+            backToMenu.setImageResource(R.drawable.ic_arrow_back_black_24dp);
+        }
     }
 
     @Override
@@ -407,29 +399,28 @@ public class InfinityModeFragment extends Fragment {
         super.onDestroy();
     }
 
-    private View.OnClickListener ReturnHomeListener = new View.OnClickListener() {
+    private View.OnClickListener ReturnHomeListener = new View.OnClickListener() { // pause or back button
         public void onClick(View v) {
 
-            if (numberToShowOnButton != 2) {
-                if (mAnimationSet0 != null) {
-                    mAnimationSet0.pause();
-                }
-                if (mAnimationSet1 != null) {
-                    mAnimationSet1.pause();
-                }
-                if (mAnimationSet2 != null) {
-                    mAnimationSet2.pause();
-                }
-                if (mAnimationSet3 != null) {
-                    mAnimationSet3.pause();
-                }
-
-                GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this,
-                        numberToShowOnButton - 1, mAnimationSet0, mAnimationSet1, mAnimationSet2, mAnimationSet3, INFINITY);
-                gameOverDialog.setCancelable(false);
-                gameOverDialog.setCanceledOnTouchOutside(false);
-                gameOverDialog.show();
+            if (mAnimationSet0 != null) {
+                mAnimationSet0.pause();
             }
+            if (mAnimationSet1 != null) {
+                mAnimationSet1.pause();
+            }
+            if (mAnimationSet2 != null) {
+                mAnimationSet2.pause();
+            }
+            if (mAnimationSet3 != null) {
+                mAnimationSet3.pause();
+            }
+
+            GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this,
+                    numberToShowOnButton - 1, mAnimationSet0, mAnimationSet1, mAnimationSet2, mAnimationSet3, INFINITY);
+            gameOverDialog.setCancelable(false);
+            gameOverDialog.setCanceledOnTouchOutside(false);
+            gameOverDialog.show();
+
         }
     };
 
