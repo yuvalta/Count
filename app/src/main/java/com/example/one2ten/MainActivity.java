@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         highScoreInfSharedPref = getSharedPreferences("yourHighScoreInfinity", Context.MODE_PRIVATE);
         bestTimeSharedPref = getSharedPreferences("bestTimeStopWatch", Context.MODE_PRIVATE);
 
-//        SharedPreferences.Editor editor = bestTimeSharedPref.edit();
+//        SharedPreferences.Editor editor = highScoreInfSharedPref.edit();
 //        editor.clear();
 //        editor.commit();
 

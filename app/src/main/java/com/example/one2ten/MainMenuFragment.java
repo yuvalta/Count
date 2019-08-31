@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -25,6 +27,7 @@ public class MainMenuFragment extends Fragment {
     TextView currentScoreTV;
     TextView timeInfo;
     TextView highScoreInfo;
+    TextView appName;
 
     Button timerModeButton;
     Button infinityModeButton;
@@ -64,12 +67,16 @@ public class MainMenuFragment extends Fragment {
         currentScoreTV = getActivity().findViewById(R.id.current_scoreTV);
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
         timeInfo = getActivity().findViewById(R.id.timer_infoTV);
+        appName = view.findViewById(R.id.appNameText);
 
         muteSounds = view.findViewById(R.id.mute_sounds);
         muteSounds.setOnClickListener(muteListener);
 
         timerModeButton.setOnClickListener(modeSelectionListener);
         infinityModeButton.setOnClickListener(modeSelectionListener);
+
+        Animation appNameAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fadein_fadeout);
+        appName.startAnimation(appNameAnimation);
 
         setTopBar(View.INVISIBLE);
 

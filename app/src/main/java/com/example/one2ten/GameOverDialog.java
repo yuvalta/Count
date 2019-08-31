@@ -7,7 +7,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class GameOverDialog extends Dialog {
@@ -82,11 +85,15 @@ public class GameOverDialog extends Dialog {
 
             currentHighScore = (infSharedPref.getInt("yourHighScoreInfinity", 0000));
 
-//            if (infSharedPref.getInt("yourHighScoreInfinity", 0000) == 0) {
-//                bestScore.setText((String.valueOf(infSharedPref.getInt("yourHighScoreInfinity", 0000))));
-//            } else {
             if (yourHighScoreInfinity > currentHighScore) { // new high yourHighScoreInfinity
                 highScoreMessage.setVisibility(View.VISIBLE);
+
+                highScoreMessage.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT)); // set the text width and height from (match_parent,0) to (match_parent,wrap_content)
+
+                Animation highScoreTextViewAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.zoomin);
+                highScoreMessage.startAnimation(highScoreTextViewAnimation);
+
                 bestScore.setText(String.valueOf(yourHighScoreInfinity));
             } else {
                 bestScore.setText(String.valueOf(currentHighScore));

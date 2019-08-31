@@ -18,6 +18,7 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -28,6 +29,9 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 
 
 public class InfinityModeFragment extends Fragment {
@@ -37,7 +41,6 @@ public class InfinityModeFragment extends Fragment {
     private int DURATION_OF_ALPHA = 3000;
     private int INFINITY = 1;
 
-
     private int currentTileRandomPlace;
     private int randomColor;
     private int probability;
@@ -46,8 +49,10 @@ public class InfinityModeFragment extends Fragment {
     private int highScore;
     private int secondFakePosition = -1;
     private int thirdFakePosition = -1;
+    private int tapsCounterWhenUserLoses = 0;
 
     boolean isMute = false;
+    boolean isHighScoreAcheviedForFirstTime = false; // this flag is for the YAY sound. i want it to be only one time when user pass high score
 
     private SharedPreferences highScoreInfSharedPref;
 
@@ -70,7 +75,7 @@ public class InfinityModeFragment extends Fragment {
 
     private boolean isFirstClick;
 
-    MediaPlayer clickMp, levelUpMp;
+    MediaPlayer clickMp, levelUpMp, HighScoreYAY;
 
 //    private RewardedAd rewardedAd;
 
@@ -115,6 +120,7 @@ public class InfinityModeFragment extends Fragment {
 
         clickMp = MediaPlayer.create(getContext(), R.raw.level_up);
         levelUpMp = MediaPlayer.create(getContext(), R.raw.click);
+        HighScoreYAY = MediaPlayer.create(getContext(), R.raw.yay_high_score);
 
         highScoreInfSharedPref = this.getActivity().getSharedPreferences("yourHighScoreInfinity", Context.MODE_PRIVATE);
         highScore = highScoreInfSharedPref.getInt("yourHighScoreInfinity", 0000);
@@ -184,7 +190,7 @@ public class InfinityModeFragment extends Fragment {
                     if (view.getTag().equals(String.valueOf(currentTileRandomPlace))) {
 
                         if (!isMute) {
-                            makeSounds();
+                            makeSounds(false);
                         }
 
                         DifficultyOfGame difficultyOfGame = new DifficultyOfGame(numberToShowOnButton);
@@ -195,6 +201,8 @@ public class InfinityModeFragment extends Fragment {
 
                         if (numberToShowOnButton > highScore) { // new high yourHighScoreInfinity!!!
                             pointsTV.setText(String.valueOf(numberToShowOnButton));
+                            makeSounds(true);
+                            isHighScoreAcheviedForFirstTime = true;
                         }
 
                         currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
@@ -252,14 +260,19 @@ public class InfinityModeFragment extends Fragment {
 
 
                     } else {
-                        loseGame(true);
+                        Log.d("aa", "aa");
+                        if (tapsCounterWhenUserLoses == 0) {
+                            loseGame();
+                        }
                     }
                 }
             });
         }
     }
 
-    public void loseGame(boolean isPressedReturn) {
+    public void loseGame() {
+
+        tapsCounterWhenUserLoses++; // this counter make sure that you press only one time on screen when losing
 
         checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
         checkAndStopTileAnimation(mAnimationSet1);
@@ -270,13 +283,18 @@ public class InfinityModeFragment extends Fragment {
 
         clickMp.release();
         levelUpMp.release();
+        HighScoreYAY.release();
 
         GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this,
-                numberToShowOnButton - 2, mAnimationSet0, mAnimationSet1, mAnimationSet2, mAnimationSet3, INFINITY);
+                numberToShowOnButton - 1, mAnimationSet0, mAnimationSet1, mAnimationSet2, mAnimationSet3, INFINITY);
         gameOverDialog.setCancelable(false);
         gameOverDialog.setCanceledOnTouchOutside(false);
         gameOverDialog.show();
         gameOverDialog.resumeButton.setVisibility(View.INVISIBLE);
+
+        gameOverDialog.resumeButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+
+
     }
 
     public void closeGameOverDialog() {
@@ -288,6 +306,7 @@ public class InfinityModeFragment extends Fragment {
         if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
+
     }
 
     public int tileCleanup(int position) {
@@ -312,12 +331,16 @@ public class InfinityModeFragment extends Fragment {
         }
     }
 
-    public void makeSounds() {
+    public void makeSounds(boolean isHighScore) {
 
-        if (numberToShowOnButton % 10 == 0) {
-            clickMp.start();
+        if (isHighScore && isHighScoreAcheviedForFirstTime == false) {
+            HighScoreYAY.start();
         } else {
-            levelUpMp.start();
+            if (numberToShowOnButton % 10 == 0) {
+                clickMp.start();
+            } else {
+                levelUpMp.start();
+            }
         }
     }
 
@@ -336,7 +359,7 @@ public class InfinityModeFragment extends Fragment {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
 
-                loseGame(false);
+                loseGame();
             }
         });
 

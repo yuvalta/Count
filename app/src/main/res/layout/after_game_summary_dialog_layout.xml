@@ -16,8 +16,9 @@
     <TextView
         android:id="@+id/high_score_message"
         style="@style/NewRecord"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="10dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/new_high_score"
@@ -77,36 +78,44 @@
 
     </LinearLayout>
 
-
-    <Button
-        android:id="@+id/resume_button"
-        style="@style/Buttons"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:background="@drawable/start_button_style"
-        android:backgroundTint="@color/menuYellow"
-        android:clickable="true"
-        android:padding="10dp"
-        android:paddingHorizontal="10dp"
-        android:text="@string/resume_button"
-        android:textAllCaps="false" />
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/quit_button"
-        style="@style/Buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:background="@drawable/start_button_style"
-        android:backgroundTint="@color/menuYellow"
-        android:clickable="true"
-        android:padding="10dp"
-        android:paddingHorizontal="10dp"
-        android:text="@string/return_to_menu"
-        android:textAllCaps="false" />
+        <Button
+            android:id="@+id/resume_button"
+            style="@style/Buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/start_button_style"
+            android:backgroundTint="@color/menuYellow"
+            android:clickable="true"
+            android:padding="10dp"
+            android:paddingHorizontal="10dp"
+            android:text="@string/resume_button"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/quit_button"
+            style="@style/Buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/start_button_style"
+            android:backgroundTint="@color/menuYellow"
+            android:clickable="true"
+            android:padding="10dp"
+            android:paddingHorizontal="10dp"
+            android:text="@string/return_to_menu"
+            android:textAllCaps="false" />
+    </LinearLayout>
 
 
 </LinearLayout>
