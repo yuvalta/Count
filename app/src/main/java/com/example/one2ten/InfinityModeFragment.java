@@ -4,12 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +24,12 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.github.jinatonic.confetti.CommonConfetti;
+
+import java.security.cert.CertPathBuilder;
 import java.util.ArrayList;
 import java.util.Random;
+
 
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.rewarded.RewardedAd;
@@ -70,6 +77,8 @@ public class InfinityModeFragment extends Fragment {
 
     private boolean isFirstClick;
 
+    private ViewGroup viewGroup;
+
     MediaPlayer clickMp, levelUpMp, HighScoreYAY;
 
 //    private RewardedAd rewardedAd;
@@ -111,6 +120,9 @@ public class InfinityModeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        viewGroup = container;
+
         View view = inflater.inflate(R.layout.fragment_infinity_mode, container, false);
 
         clickMp = MediaPlayer.create(getContext(), R.raw.level_up);
@@ -118,7 +130,7 @@ public class InfinityModeFragment extends Fragment {
         HighScoreYAY = MediaPlayer.create(getContext(), R.raw.yay_high_score);
 
         highScoreInfSharedPref = this.getActivity().getSharedPreferences("yourHighScoreInfinity", Context.MODE_PRIVATE);
-        highScore = highScoreInfSharedPref.getInt("yourHighScoreInfinity", 0000);
+        highScore = highScoreInfSharedPref.getInt("yourHighScoreInfinity", 1);
 
         isFirstClick = true;
 
@@ -187,6 +199,10 @@ public class InfinityModeFragment extends Fragment {
                             if (!isMute) { // if we are on quiet mode
                                 makeSounds(true);
                             }
+
+                            if (!isHighScoreAcheviedForFirstTime) { // play confetti on high score
+                                CommonConfetti.rainingConfetti(viewGroup, new int[]{Color.RED, Color.WHITE, Color.YELLOW}).oneShot();
+                            }
                             isHighScoreAcheviedForFirstTime = true;
                         }
 
@@ -243,9 +259,7 @@ public class InfinityModeFragment extends Fragment {
                             fakeTilePosition = -1;
                         }
 
-
                     } else {
-                        Log.d("aa", "aa");
                         if (tapsCounterWhenUserLoses == 0) {
                             loseGame();
                         }
