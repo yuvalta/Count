@@ -15,14 +15,20 @@ import android.widget.TextView;
 
 public class GameOverDialog extends Dialog {
 
-    int INFINITY = 1;
     int STOP_WATCH = 0;
+    int INFINITY = 1;
+    int TRY_AGAIN = 2;
+    int RESUME = 3;
+
+    int result;
+
 
     int currentHighScore = 0;
     int currentBestTime = 0;
 
     Button resumeButton;
     Button returnButton;
+    Button tryAgainButton;
     Context context;
 
     InfinityModeFragment infinityModeFragment;
@@ -37,6 +43,8 @@ public class GameOverDialog extends Dialog {
     AnimatorSet animatorSet2;
     AnimatorSet animatorSet3;
     StopWatch stopper;
+
+    boolean resultIsResumeOrTryAgain; // true --> resume, false --> try again
 
     public int gameMode;
 
@@ -76,10 +84,19 @@ public class GameOverDialog extends Dialog {
         bestScore = findViewById(R.id.high_score_game_over_TV);
         highScoreMessage = findViewById(R.id.high_score_message);
 
+        tryAgainButton = findViewById(R.id.try_again_button);
+        returnButton = findViewById(R.id.quit_button);
+        resumeButton = findViewById(R.id.resume_button);
+
         SharedPreferences infSharedPref = null;
         SharedPreferences stopWatchSharedPref = null;
 
         if (gameMode == INFINITY) {
+
+            if (!infinityModeFragment.isAdLoaded()) {
+                tryAgainButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+            }
+
             yourScore.setText(String.valueOf(yourHighScoreInfinity));
             infSharedPref = infinityModeFragment.getActivity().getSharedPreferences("yourHighScoreInfinity", Context.MODE_PRIVATE);
 
@@ -117,7 +134,7 @@ public class GameOverDialog extends Dialog {
             }
         }
 
-        resumeButton = findViewById(R.id.resume_button);
+//        resumeButton = findViewById(R.id.resume_button);
         resumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,22 +154,35 @@ public class GameOverDialog extends Dialog {
                 } else {
                     stopper.resumeStopWatch();
                 }
+
+                result = RESUME;
+
                 highScoreMessage.setVisibility(View.INVISIBLE);
                 dismiss();
             }
         });
 
-        returnButton = findViewById(R.id.quit_button);
+//        returnButton = findViewById(R.id.quit_button);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (gameMode == INFINITY) {
-                    infinityModeFragment.closeGameOverDialog();
+                    infinityModeFragment.onMainMenuPressed();
                 } else if (gameMode == STOP_WATCH) {
                     stopWatchModeFragment.winGame(false);
                 }
                 highScoreMessage.setVisibility(View.INVISIBLE);
+                dismiss();
+            }
+        });
+
+//        tryAgainButton = findViewById(R.id.try_again_button);
+        tryAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                infinityModeFragment.onTryAgainPressed();
                 dismiss();
             }
         });

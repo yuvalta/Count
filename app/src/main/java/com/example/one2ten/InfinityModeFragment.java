@@ -4,15 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,22 +18,22 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.github.jinatonic.confetti.CommonConfetti;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
-import java.security.cert.CertPathBuilder;
 import java.util.ArrayList;
 import java.util.Random;
 
 
-//import com.google.android.gms.ads.AdRequest;
-//import com.google.android.gms.ads.rewarded.RewardedAd;
-//import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-
-
-public class InfinityModeFragment extends Fragment {
+public class InfinityModeFragment extends Fragment implements RewardedVideoAdListener {
 
     private int MAX_BUTTON = 31;
     private int MIN_BUTTON = 0;
@@ -55,6 +52,7 @@ public class InfinityModeFragment extends Fragment {
 
     boolean isMute = false;
     boolean isHighScoreAcheviedForFirstTime = false; // this flag is for the YAY sound. i want it to be only one time when user pass high score
+    boolean isTryAgainHappend = false;
 
     private SharedPreferences highScoreInfSharedPref;
 
@@ -81,7 +79,10 @@ public class InfinityModeFragment extends Fragment {
 
     MediaPlayer clickMp, levelUpMp, HighScoreYAY;
 
-//    private RewardedAd rewardedAd;
+
+    private RewardedVideoAd rewardedVideoAd;
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
+
 
     int[] ids = new int[]{R.id.cell0, R.id.cell1, R.id.cell2, R.id.cell3, R.id.cell4, R.id.cell5, R.id.cell6, R.id.cell7, R.id.cell8, R.id.cell9, R.id.cell10,
             R.id.cell11, R.id.cell12, R.id.cell13, R.id.cell14, R.id.cell15, R.id.cell16, R.id.cell17, R.id.cell18, R.id.cell19, R.id.cell20,
@@ -101,20 +102,12 @@ public class InfinityModeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        rewardedAd = new RewardedAd(getContext(), "ca-app-pub-3940256099942544/5224354917");
-//
-//        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
-//            @Override
-//            public void onRewardedAdLoaded() {
-//                // Ad successfully loaded.
-//            }
-//
-//            @Override
-//            public void onRewardedAdFailedToLoad(int errorCode) {
-//                // Ad failed to load. look for return values on https://developers.google.com/admob/android/rewarded-ads
-//            }
-//        };
-//        rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
+
+        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
+        rewardedVideoAd.setRewardedVideoAdListener(this);
+        loadRewardedVideoAd();
     }
 
     @Override
@@ -165,24 +158,42 @@ public class InfinityModeFragment extends Fragment {
                         backToMenu.setImageResource(R.drawable.ic_pause_black_24dp);
                     }
 
-                    checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
-                    checkAndStopTileAnimation(mAnimationSet1);
-                    checkAndStopTileAnimation(mAnimationSet2);
-                    checkAndStopTileAnimation(mAnimationSet3);
+//                    checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
+//                    checkAndStopTileAnimation(mAnimationSet1);
+//                    checkAndStopTileAnimation(mAnimationSet2);
+//                    checkAndStopTileAnimation(mAnimationSet3);
 
-                    tileCleanup(currentTileRandomPlace); // clean tile and
+//                    tileCleanup(currentTileRandomPlace); // clean tile and
 
-                    if (fakeTilePosition >= 0) {
-                        fakeTilePosition = tileCleanup(fakeTilePosition);
-                    }
-                    if (secondFakePosition >= 0) {
-                        secondFakePosition = tileCleanup(secondFakePosition);
-                    }
-                    if (thirdFakePosition >= 0) {
-                        thirdFakePosition = tileCleanup(thirdFakePosition);
-                    }
+
+//                    if (fakeTilePosition >= 0) {
+//                        fakeTilePosition = tileCleanup(fakeTilePosition);
+//                    }
+//                    if (secondFakePosition >= 0) {
+//                        secondFakePosition = tileCleanup(secondFakePosition);
+//                    }
+//                    if (thirdFakePosition >= 0) {
+//                        thirdFakePosition = tileCleanup(thirdFakePosition);
+//                    }
+
 
                     if (view.getTag().equals(String.valueOf(currentTileRandomPlace))) {
+                        checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
+                        checkAndStopTileAnimation(mAnimationSet1);
+                        checkAndStopTileAnimation(mAnimationSet2);
+                        checkAndStopTileAnimation(mAnimationSet3);
+
+                        tileCleanup(currentTileRandomPlace); // clean tile and
+
+                        if (fakeTilePosition >= 0) {
+                            fakeTilePosition = tileCleanup(fakeTilePosition);
+                        }
+                        if (secondFakePosition >= 0) {
+                            secondFakePosition = tileCleanup(secondFakePosition);
+                        }
+                        if (thirdFakePosition >= 0) {
+                            thirdFakePosition = tileCleanup(thirdFakePosition);
+                        }
 
                         if (!isMute) {
                             makeSounds(false);
@@ -273,30 +284,62 @@ public class InfinityModeFragment extends Fragment {
 
         tapsCounterWhenUserLoses++; // this counter make sure that you press only one time on screen when losing
 
-        checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
-        checkAndStopTileAnimation(mAnimationSet1);
-        checkAndStopTileAnimation(mAnimationSet2);
-        checkAndStopTileAnimation(mAnimationSet3);
+        if (mAnimationSet0 != null) {
+            mAnimationSet0.pause();
+        }
+        if (mAnimationSet1 != null) {
+            mAnimationSet1.pause();
+        }
+        if (mAnimationSet2 != null) {
+            mAnimationSet2.pause();
+        }
+        if (mAnimationSet3 != null) {
+            mAnimationSet3.pause();
+        }
 
-        currentScoreTV.setText("0");
+//        checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
+//        checkAndStopTileAnimation(mAnimationSet1);
+//        checkAndStopTileAnimation(mAnimationSet2);
+//        checkAndStopTileAnimation(mAnimationSet3);
 
-        clickMp.release();
-        levelUpMp.release();
-        HighScoreYAY.release();
+//        currentScoreTV.setText("0");
+//
+//        clickMp.release();
+//        levelUpMp.release();
+//        HighScoreYAY.release();
 
         GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this,
                 numberToShowOnButton - 1, mAnimationSet0, mAnimationSet1, mAnimationSet2, mAnimationSet3, INFINITY);
         gameOverDialog.setCancelable(false);
         gameOverDialog.setCanceledOnTouchOutside(false);
         gameOverDialog.show();
+
+        if (isTryAgainHappend) {
+            gameOverDialog.tryAgainButton.setVisibility(View.INVISIBLE);
+            gameOverDialog.tryAgainButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        }
         gameOverDialog.resumeButton.setVisibility(View.INVISIBLE);
-
         gameOverDialog.resumeButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-
-
     }
 
-    public void closeGameOverDialog() {
+    public void onTryAgainPressed() {
+        isTryAgainHappend = true;
+        tapsCounterWhenUserLoses--; // set it back to 0
+        showRewardedVideo();
+    }
+
+    public void onMainMenuPressed() {
+
+        checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
+        checkAndStopTileAnimation(mAnimationSet1);
+        checkAndStopTileAnimation(mAnimationSet2);
+        checkAndStopTileAnimation(mAnimationSet3);
+
+        currentScoreTV.setText("0");
+        clickMp.release();
+        levelUpMp.release();
+        HighScoreYAY.release();
+
         if (numberToShowOnButton - 1 > highScore) { // new high yourHighScoreInfinity!!!
             SharedPreferences.Editor editor = highScoreInfSharedPref.edit();
             editor.putInt("yourHighScoreInfinity", numberToShowOnButton - 1);
@@ -437,6 +480,85 @@ public class InfinityModeFragment extends Fragment {
 
         }
     };
+
+    public boolean isAdLoaded() {
+        if (rewardedVideoAd.isLoaded()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private void loadRewardedVideoAd() {
+        if (!rewardedVideoAd.isLoaded()) {
+            Toast.makeText(getActivity(), "bbb", Toast.LENGTH_SHORT).show();
+
+            rewardedVideoAd.loadAd(AD_UNIT_ID, new AdRequest.Builder().build());
+        }
+    }
+
+    public void showRewardedVideo() {
+        if (rewardedVideoAd.isLoaded()) {
+            Toast.makeText(getContext(), "show", Toast.LENGTH_SHORT).show();
+            rewardedVideoAd.show();
+        }
+    }
+
+    @Override
+    public void onRewardedVideoAdLoaded() {
+        Toast.makeText(getActivity(), "loaded", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+
+        Toast.makeText(getActivity(), "closed", Toast.LENGTH_SHORT).show();
+        if (mAnimationSet0 != null) {
+            mAnimationSet0.resume();
+        }
+        if (mAnimationSet1 != null) {
+            mAnimationSet1.resume();
+        }
+        if (mAnimationSet2 != null) {
+            mAnimationSet2.resume();
+        }
+        if (mAnimationSet3 != null) {
+            mAnimationSet3.resume();
+        }
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem) {
+        Toast.makeText(getActivity(), rewardItem.toString(), Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+
+    }
+
+    @Override
+    public void onRewardedVideoCompleted() {
+
+    }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

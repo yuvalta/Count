@@ -16,9 +16,19 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
 public class MainMenuFragment extends Fragment {
-    private InfinityModeFragment.OnFragmentInteractionListener mListener;
+
+    private InfinityModeFragment.OnFragmentInteractionListener mListener ;
 
     LinearLayout topBar;
 
@@ -39,15 +49,32 @@ public class MainMenuFragment extends Fragment {
 
     boolean isPressedBackTwice;
 
+//    private RewardedVideoAd rewardedVideoAd;
+//
+//    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Initialize the Mobile Ads SDK.
+//        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
+//
+//        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
+//        rewardedVideoAd.setRewardedVideoAdListener();
+//        loadRewardedVideoAd();
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_menu, container, false);
 
@@ -103,6 +130,7 @@ public class MainMenuFragment extends Fragment {
     private View.OnClickListener modeSelectionListener = new View.OnClickListener() {
         public void onClick(View v) {
 
+
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -147,6 +175,37 @@ public class MainMenuFragment extends Fragment {
     public MainMenuFragment() {
         // Required empty public constructor
     }
+
+    @Override
+    public void onResume() {
+
+//        // Initialize the Mobile Ads SDK.
+//        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
+//
+//        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
+//        rewardedVideoAd.setRewardedVideoAdListener(this);
+//        loadRewardedVideoAd();
+
+        super.onResume();
+    }
+
+//    private void loadRewardedVideoAd() {
+//        if (!rewardedVideoAd.isLoaded()) {
+//            Toast.makeText(getContext(), "bbb", Toast.LENGTH_SHORT).show();
+//
+//            rewardedVideoAd.loadAd(AD_UNIT_ID, new AdRequest.Builder().build());
+//        }
+//    }
+//
+//    public void showRewardedVideo() {
+//        if (rewardedVideoAd.isLoaded()) {
+//            Toast.makeText(getContext(), "aaa", Toast.LENGTH_SHORT).show();
+//
+//            rewardedVideoAd.show();
+//        }
+//    }
+
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
