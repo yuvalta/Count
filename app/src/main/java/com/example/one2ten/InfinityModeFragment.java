@@ -220,7 +220,7 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
                         currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
                         randomColor = generateRandomNumber(colorsArray.length - 1, 0);
 
-                        mAnimationSet0 = fadeOutButton(currentTileRandomPlace, mAnimationSet0);
+                        mAnimationSet0 = fadeOutButton(currentTileRandomPlace);
 
                         createTile(currentTileRandomPlace, randomColor, numberToShowOnButton++);
 
@@ -236,7 +236,7 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
                             createTile(fakeTilePosition, (randomColor + 1) % colorsArray.length,
                                     generateRandomNumber(numberToShowOnButton / 2, 1)); // create fake tile with some arbitrary color
 
-                            mAnimationSet1 = fadeOutButton(fakeTilePosition, mAnimationSet1);
+                            mAnimationSet1 = fadeOutButton(fakeTilePosition);
 
                             secondFakePosition = generateRandomNumber(MAX_BUTTON, MIN_BUTTON); // second fake tile
 
@@ -246,7 +246,7 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
                                 createTile(secondFakePosition, (randomColor + 2) % colorsArray.length,
                                         generateRandomNumber(numberToShowOnButton / 2, 1));
 
-                                mAnimationSet2 = fadeOutButton(secondFakePosition, mAnimationSet2);
+                                mAnimationSet2 = fadeOutButton(secondFakePosition);
 
                             } else {
                                 secondFakePosition = -1;
@@ -260,7 +260,7 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
                                 createTile(thirdFakePosition, (randomColor + 3) % colorsArray.length,
                                         generateRandomNumber(numberToShowOnButton / 2, 1));
 
-                                mAnimationSet3 = fadeOutButton(thirdFakePosition, mAnimationSet3);
+                                mAnimationSet3 = fadeOutButton(thirdFakePosition);
 
                             } else {
                                 thirdFakePosition = -1;
@@ -272,7 +272,10 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
 
                     } else {
                         if (tapsCounterWhenUserLoses == 0) {
-                            loseGame();
+                            if (view.getTag().equals(String.valueOf(fakeTilePosition)) || view.getTag().equals(String.valueOf(secondFakePosition))
+                                    || view.getTag().equals(String.valueOf(thirdFakePosition))) {
+                                loseGame();
+                            } // the user can press on nothing and not lose
                         }
                     }
                 }
@@ -391,12 +394,12 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
     }
 
 
-    public AnimatorSet fadeOutButton(final int currentPlaceOfButton, AnimatorSet mAnimationSet) {
+    public AnimatorSet fadeOutButton(final int currentPlaceOfButton) {
 
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(textViewArrayList.get(currentPlaceOfButton), "alpha", 1f, 0f);
         fadeOut.setDuration(DURATION_OF_ALPHA);
 
-        mAnimationSet = new AnimatorSet();
+        AnimatorSet mAnimationSet = new AnimatorSet();
 
         mAnimationSet.play(fadeOut);
 
@@ -405,6 +408,8 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
 
+//                createTile(currentPlaceOfButton, 1, 10);
+                        
                 loseGame();
             }
         });
@@ -484,8 +489,7 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
     public boolean isAdLoaded() {
         if (rewardedVideoAd.isLoaded()) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
