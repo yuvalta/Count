@@ -18,22 +18,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
-
 import com.github.jinatonic.confetti.CommonConfetti;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-
-public class InfinityModeFragment extends Fragment implements RewardedVideoAdListener {
+public class InfinityModeFragment extends Fragment {
 
     private int MAX_BUTTON = 31;
     private int MIN_BUTTON = 0;
@@ -79,6 +70,8 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
 
     MediaPlayer clickMp, levelUpMp, HighScoreYAY;
 
+    MainMenuFragment mainMenuFragment;
+
 
     private RewardedVideoAd rewardedVideoAd;
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
@@ -94,26 +87,20 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
 
     ArrayList<TextView> textViewArrayList = new ArrayList<TextView>(ids.length);
 
-    public InfinityModeFragment(boolean isMute) {
+    public InfinityModeFragment(boolean isMute, RewardedVideoAd rewardedVideoAd, MainMenuFragment mainMenuFragment) {
         this.isMute = isMute;
+        this.rewardedVideoAd = rewardedVideoAd;
+        this.mainMenuFragment = mainMenuFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
-
-        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
-        rewardedVideoAd.setRewardedVideoAdListener(this);
-        loadRewardedVideoAd();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         viewGroup = container;
 
         View view = inflater.inflate(R.layout.fragment_infinity_mode, container, false);
@@ -145,7 +132,6 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
             TextView currentTextView = view.findViewById(ids[i]);
             textViewArrayList.add(currentTextView);
             textViewArrayList.get(i).getBackground().setTint(getResources().getColor(R.color.transparent));
-
         }
 
         for (int i = 0; i < ids.length; i++) { // set listeners to all buttons
@@ -157,25 +143,6 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
                     if (numberToShowOnButton > 1) {
                         backToMenu.setImageResource(R.drawable.ic_pause_black_24dp);
                     }
-
-//                    checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
-//                    checkAndStopTileAnimation(mAnimationSet1);
-//                    checkAndStopTileAnimation(mAnimationSet2);
-//                    checkAndStopTileAnimation(mAnimationSet3);
-
-//                    tileCleanup(currentTileRandomPlace); // clean tile and
-
-
-//                    if (fakeTilePosition >= 0) {
-//                        fakeTilePosition = tileCleanup(fakeTilePosition);
-//                    }
-//                    if (secondFakePosition >= 0) {
-//                        secondFakePosition = tileCleanup(secondFakePosition);
-//                    }
-//                    if (thirdFakePosition >= 0) {
-//                        thirdFakePosition = tileCleanup(thirdFakePosition);
-//                    }
-
 
                     if (view.getTag().equals(String.valueOf(currentTileRandomPlace))) {
                         checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
@@ -272,10 +239,7 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
 
                     } else {
                         if (tapsCounterWhenUserLoses == 0) {
-                            if (view.getTag().equals(String.valueOf(fakeTilePosition)) || view.getTag().equals(String.valueOf(secondFakePosition))
-                                    || view.getTag().equals(String.valueOf(thirdFakePosition))) {
-                                loseGame();
-                            } // the user can press on nothing and not lose
+                            loseGame();
                         }
                     }
                 }
@@ -284,32 +248,7 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
     }
 
     public void loseGame() {
-
         tapsCounterWhenUserLoses++; // this counter make sure that you press only one time on screen when losing
-
-        if (mAnimationSet0 != null) {
-            mAnimationSet0.pause();
-        }
-        if (mAnimationSet1 != null) {
-            mAnimationSet1.pause();
-        }
-        if (mAnimationSet2 != null) {
-            mAnimationSet2.pause();
-        }
-        if (mAnimationSet3 != null) {
-            mAnimationSet3.pause();
-        }
-
-//        checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
-//        checkAndStopTileAnimation(mAnimationSet1);
-//        checkAndStopTileAnimation(mAnimationSet2);
-//        checkAndStopTileAnimation(mAnimationSet3);
-
-//        currentScoreTV.setText("0");
-//
-//        clickMp.release();
-//        levelUpMp.release();
-//        HighScoreYAY.release();
 
         GameOverDialog gameOverDialog = new GameOverDialog(getContext(), InfinityModeFragment.this,
                 numberToShowOnButton - 1, mAnimationSet0, mAnimationSet1, mAnimationSet2, mAnimationSet3, INFINITY);
@@ -323,16 +262,32 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
         }
         gameOverDialog.resumeButton.setVisibility(View.INVISIBLE);
         gameOverDialog.resumeButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+
+        if (mAnimationSet0 != null) {
+            mAnimationSet0.start();
+            mAnimationSet0.pause();
+        }
+        if (mAnimationSet1 != null) {
+            mAnimationSet1.start();
+            mAnimationSet1.pause();
+        }
+        if (mAnimationSet2 != null) {
+            mAnimationSet2.start();
+            mAnimationSet2.pause();
+        }
+        if (mAnimationSet3 != null) {
+            mAnimationSet3.start();
+            mAnimationSet3.pause();
+        }
     }
 
     public void onTryAgainPressed() {
         isTryAgainHappend = true;
         tapsCounterWhenUserLoses--; // set it back to 0
-        showRewardedVideo();
+        mainMenuFragment.showRewardedVideo();
     }
 
     public void onMainMenuPressed() {
-
         checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
         checkAndStopTileAnimation(mAnimationSet1);
         checkAndStopTileAnimation(mAnimationSet2);
@@ -351,7 +306,6 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
         if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
-
     }
 
     public int tileCleanup(int position) {
@@ -365,7 +319,6 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
         textViewArrayList.get(position).getBackground().setTint(getResources().getColor(colorsArray[randomColor]));
         textViewArrayList.get(position).setText(String.valueOf(numberToShowOnButton));
         textViewArrayList.get(position).setTextSize(30);
-
     }
 
     public void checkAndStopTileAnimation(AnimatorSet animatorSet) {
@@ -377,7 +330,6 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
     }
 
     public void makeSounds(boolean isHighScore) {
-
         if (isHighScore && isHighScoreAcheviedForFirstTime == false) {
             HighScoreYAY.start();
             Animation highScoreCounterAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
@@ -393,13 +345,11 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
         }
     }
 
-
     public AnimatorSet fadeOutButton(final int currentPlaceOfButton) {
-
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(textViewArrayList.get(currentPlaceOfButton), "alpha", 1f, 0f);
         fadeOut.setDuration(DURATION_OF_ALPHA);
 
-        AnimatorSet mAnimationSet = new AnimatorSet();
+        final AnimatorSet mAnimationSet = new AnimatorSet();
 
         mAnimationSet.play(fadeOut);
 
@@ -407,21 +357,16 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-
-//                createTile(currentPlaceOfButton, 1, 10);
-                        
+                mAnimationSet.start();
                 loseGame();
             }
         });
-
         mAnimationSet.start();
 
         return mAnimationSet;
-
     }
 
     public void bindGridViews(View view) {
-
         // topBar binding
         topBar = getActivity().findViewById(R.id.top_bar);
         timerLinearLayout = getActivity().findViewById(R.id.timer_ll);
@@ -443,7 +388,6 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
         return randomNum;
     }
 
-
     private void setTopBar(int showTopBar) {
         pointsTV.setVisibility(showTopBar);
         currentScoreTV.setVisibility(showTopBar);
@@ -463,7 +407,6 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
 
     private View.OnClickListener ReturnHomeListener = new View.OnClickListener() { // pause or back button
         public void onClick(View v) {
-
             if (mAnimationSet0 != null) {
                 mAnimationSet0.pause();
             }
@@ -483,6 +426,8 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
             gameOverDialog.setCanceledOnTouchOutside(false);
             gameOverDialog.show();
 
+            gameOverDialog.tryAgainButton.setVisibility(View.INVISIBLE);
+            gameOverDialog.tryAgainButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
         }
     };
 
@@ -493,76 +438,6 @@ public class InfinityModeFragment extends Fragment implements RewardedVideoAdLis
             return false;
         }
     }
-
-    private void loadRewardedVideoAd() {
-        if (!rewardedVideoAd.isLoaded()) {
-            Toast.makeText(getActivity(), "bbb", Toast.LENGTH_SHORT).show();
-
-            rewardedVideoAd.loadAd(AD_UNIT_ID, new AdRequest.Builder().build());
-        }
-    }
-
-    public void showRewardedVideo() {
-        if (rewardedVideoAd.isLoaded()) {
-            Toast.makeText(getContext(), "show", Toast.LENGTH_SHORT).show();
-            rewardedVideoAd.show();
-        }
-    }
-
-    @Override
-    public void onRewardedVideoAdLoaded() {
-        Toast.makeText(getActivity(), "loaded", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRewardedVideoAdOpened() {
-
-    }
-
-    @Override
-    public void onRewardedVideoStarted() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdClosed() {
-
-        Toast.makeText(getActivity(), "closed", Toast.LENGTH_SHORT).show();
-        if (mAnimationSet0 != null) {
-            mAnimationSet0.resume();
-        }
-        if (mAnimationSet1 != null) {
-            mAnimationSet1.resume();
-        }
-        if (mAnimationSet2 != null) {
-            mAnimationSet2.resume();
-        }
-        if (mAnimationSet3 != null) {
-            mAnimationSet3.resume();
-        }
-    }
-
-    @Override
-    public void onRewarded(RewardItem rewardItem) {
-        Toast.makeText(getActivity(), rewardItem.toString(), Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    public void onRewardedVideoAdLeftApplication() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdFailedToLoad(int i) {
-
-    }
-
-    @Override
-    public void onRewardedVideoCompleted() {
-
-    }
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

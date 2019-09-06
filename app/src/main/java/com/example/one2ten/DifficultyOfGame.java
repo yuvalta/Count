@@ -1,24 +1,22 @@
 package com.example.one2ten;
 
-import android.util.Log;
-
 public class DifficultyOfGame {
 
     private int LEVEL_1 = 3000;
     private int LEVEL_2 = 2500;
     private int LEVEL_3 = 2200;
-    private int LEVEL_4 = 1800;
-    private int LEVEL_5 = 1750;
-    private int LEVEL_6 = 1500;
-    private int LEVEL_7 = 1250;
-    private int LEVEL_8 = 1100;
-    private int LEVEL_9 = 1000;
-    private int LEVEL_10 = 900;
-    private int LEVEL_11 = 850;
-    private int LEVEL_12 = 750;
-    private int LEVEL_13 = 700;
-    private int LEVEL_14 = 650;
-    private int LEVEL_15 = 500;
+    private int LEVEL_4 = 2000;
+    private int LEVEL_5 = 1900;
+    private int LEVEL_6 = 1700;
+    private int LEVEL_7 = 1500;
+    private int LEVEL_8 = 1400;
+    private int LEVEL_9 = 1200;
+    private int LEVEL_10 = 1100;
+    private int LEVEL_11 = 1000;
+    private int LEVEL_12 = 900;
+    private int LEVEL_13 = 900;
+    private int LEVEL_14 = 900;
+    private int LEVEL_15 = 900;
 
 //    private int LEVEL_1 = 6000;// test
 //    private int LEVEL_2 = 6000;
@@ -35,16 +33,15 @@ public class DifficultyOfGame {
 //    private int LEVEL_13 = 6000;
 //    private int LEVEL_14 = 6000;
 //    private int LEVEL_15 = 6000;
-
 //    private int LEVEL_16 = 500;
 //    private int LEVEL_17 = 500;
 //    private int LEVEL_18 = 500;
 //    private int LEVEL_19 = 500;
 //    private int LEVEL_20 = 500;
 
-    private int PROB_1 = 0;
-    private int PROB_2 = 50;
-    private int PROB_3 = 60;
+    private int PROB_1 = 10;
+    private int PROB_2 = 40;
+    private int PROB_3 = 50;
     private int PROB_4 = 60;
     private int PROB_5 = 70;
     private int PROB_6 = 70;

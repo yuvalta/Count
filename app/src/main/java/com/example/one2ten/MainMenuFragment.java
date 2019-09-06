@@ -26,7 +26,7 @@ import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
-public class MainMenuFragment extends Fragment {
+public class MainMenuFragment extends Fragment implements RewardedVideoAdListener {
 
     private InfinityModeFragment.OnFragmentInteractionListener mListener ;
 
@@ -47,33 +47,33 @@ public class MainMenuFragment extends Fragment {
 
     boolean isMute = false;
 
+    boolean isRewarded = false;
+
     boolean isPressedBackTwice;
 
-//    private RewardedVideoAd rewardedVideoAd;
-//
-//    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
+    MainMenuFragment mainMenuFragment;
 
+    private RewardedVideoAd rewardedVideoAd;
 
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mainMenuFragment = this;
 
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
 
-
+        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
+        rewardedVideoAd.setRewardedVideoAdListener(this);
+        loadRewardedVideoAd();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Initialize the Mobile Ads SDK.
-//        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
-//
-//        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
-//        rewardedVideoAd.setRewardedVideoAdListener();
-//        loadRewardedVideoAd();
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_menu, container, false);
@@ -145,7 +145,7 @@ public class MainMenuFragment extends Fragment {
 
                 case R.id.infinity_mode_button:
 
-                    InfinityModeFragment infinityModeFragment = new InfinityModeFragment(isMute);
+                    InfinityModeFragment infinityModeFragment = new InfinityModeFragment(isMute, rewardedVideoAd, mainMenuFragment);
                     fragmentTransaction.add(R.id.frame_layout_for_fragments, infinityModeFragment).addToBackStack("TimerFragment");
                     fragmentTransaction.commit();
 
@@ -179,33 +179,79 @@ public class MainMenuFragment extends Fragment {
     @Override
     public void onResume() {
 
-//        // Initialize the Mobile Ads SDK.
-//        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
-//
-//        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
-//        rewardedVideoAd.setRewardedVideoAdListener(this);
-//        loadRewardedVideoAd();
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
+
+        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
+        rewardedVideoAd.setRewardedVideoAdListener(this);
+        loadRewardedVideoAd();
 
         super.onResume();
     }
 
-//    private void loadRewardedVideoAd() {
-//        if (!rewardedVideoAd.isLoaded()) {
-//            Toast.makeText(getContext(), "bbb", Toast.LENGTH_SHORT).show();
-//
-//            rewardedVideoAd.loadAd(AD_UNIT_ID, new AdRequest.Builder().build());
-//        }
-//    }
-//
-//    public void showRewardedVideo() {
-//        if (rewardedVideoAd.isLoaded()) {
-//            Toast.makeText(getContext(), "aaa", Toast.LENGTH_SHORT).show();
-//
-//            rewardedVideoAd.show();
-//        }
-//    }
+    private void loadRewardedVideoAd() {
+        if (!rewardedVideoAd.isLoaded()) {
+            Toast.makeText(getContext(), "bbb", Toast.LENGTH_SHORT).show();
+
+            rewardedVideoAd.loadAd(AD_UNIT_ID, new AdRequest.Builder().build());
+        }
+    }
 
 
+    public void showRewardedVideo() {
+        if (rewardedVideoAd.isLoaded()) {
+            Toast.makeText(getContext(), "aaa", Toast.LENGTH_SHORT).show();
+
+            rewardedVideoAd.show();
+        }
+    }
+
+    @Override
+    public void onRewardedVideoAdLoaded() {
+        Toast.makeText(getActivity(), "loaded", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+        if (!isRewarded) { // if user stops ad in the middle
+            Toast.makeText(getActivity(), "closed", Toast.LENGTH_SHORT).show();
+            if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        }
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem) {
+        isRewarded = true; // flag to know if user saw all video
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+        if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+
+    }
+
+    @Override
+    public void onRewardedVideoCompleted() {
+
+    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

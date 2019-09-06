@@ -134,7 +134,6 @@ public class GameOverDialog extends Dialog {
             }
         }
 
-//        resumeButton = findViewById(R.id.resume_button);
         resumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,7 +153,6 @@ public class GameOverDialog extends Dialog {
                 } else {
                     stopper.resumeStopWatch();
                 }
-
                 result = RESUME;
 
                 highScoreMessage.setVisibility(View.INVISIBLE);
@@ -162,7 +160,6 @@ public class GameOverDialog extends Dialog {
             }
         });
 
-//        returnButton = findViewById(R.id.quit_button);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,7 +174,6 @@ public class GameOverDialog extends Dialog {
             }
         });
 
-//        tryAgainButton = findViewById(R.id.try_again_button);
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
