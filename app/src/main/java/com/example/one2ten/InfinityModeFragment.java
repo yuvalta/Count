@@ -18,9 +18,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
+
 import com.github.jinatonic.confetti.CommonConfetti;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -259,9 +262,10 @@ public class InfinityModeFragment extends Fragment {
         if (isTryAgainHappend) {
             gameOverDialog.tryAgainButton.setVisibility(View.INVISIBLE);
             gameOverDialog.tryAgainButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        }
+
     }
 
-        }
     public void startAnimationsAfterAd() {
         if (mAnimationSet0 != null) {
             mAnimationSet0.start();
