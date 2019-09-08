@@ -259,10 +259,10 @@ public class InfinityModeFragment extends Fragment {
         if (isTryAgainHappend) {
             gameOverDialog.tryAgainButton.setVisibility(View.INVISIBLE);
             gameOverDialog.tryAgainButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-        }
-        gameOverDialog.resumeButton.setVisibility(View.INVISIBLE);
-        gameOverDialog.resumeButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+    }
 
+        }
+    public void startAnimationsAfterAd() {
         if (mAnimationSet0 != null) {
             mAnimationSet0.start();
             mAnimationSet0.pause();
@@ -357,8 +357,20 @@ public class InfinityModeFragment extends Fragment {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                mAnimationSet.start();
                 loseGame();
+
+                if (mAnimationSet0 != null) {
+                    mAnimationSet0.pause();
+                }
+                if (mAnimationSet1 != null) {
+                    mAnimationSet1.pause();
+                }
+                if (mAnimationSet2 != null) {
+                    mAnimationSet2.pause();
+                }
+                if (mAnimationSet3 != null) {
+                    mAnimationSet3.pause();
+                }
             }
         });
         mAnimationSet.start();

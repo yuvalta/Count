@@ -178,6 +178,8 @@ public class GameOverDialog extends Dialog {
             @Override
             public void onClick(View view) {
 
+                infinityModeFragment.startAnimationsAfterAd();
+
                 infinityModeFragment.onTryAgainPressed();
                 dismiss();
             }
