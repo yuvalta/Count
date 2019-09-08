@@ -104,14 +104,14 @@
             android:clickable="true"
             android:padding="10dp"
             android:paddingHorizontal="10dp"
-            android:text="Try again"
+            android:text="Continue"
             android:textAllCaps="false" />
 
         <Button
             android:id="@+id/resume_button"
             style="@style/Buttons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@drawable/start_button_style"
