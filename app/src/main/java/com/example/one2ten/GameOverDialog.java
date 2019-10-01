@@ -170,8 +170,6 @@ public class GameOverDialog extends Dialog {
                     stopWatchModeFragment.winGame(false);
                 }
                 highScoreMessage.setVisibility(View.INVISIBLE);
-                resumeButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT)); // set the text width and height from (match_parent,0) to (match_parent,wrap_content)
                 dismiss();
             }
         });

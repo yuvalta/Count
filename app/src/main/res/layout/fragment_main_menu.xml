@@ -72,17 +72,17 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="65dp"
-                android:layout_marginHorizontal="20dp"
-                android:fontFamily="@font/poiret_family"
-                android:gravity="center"
-                android:text="no ads"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+<!--            <Button-->
+<!--                android:id="@+id/button1"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="65dp"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:fontFamily="@font/poiret_family"-->
+<!--                android:gravity="center"-->
+<!--                android:text="no ads"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="30sp" />-->
 
             <ImageButton
                 android:id="@+id/mute_sounds"

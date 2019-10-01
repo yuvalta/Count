@@ -16,4 +16,7 @@
     <string name="resume_button">Resume</string>
     <string name="return_to_menu">Main Menu</string>
     <string name="new_high_score">New High Score</string>
+    <string name="game_explain_hit_tile">Press on the tile</string>
+    <string name="game_explain_asc">Hit the tiles on ascending order</string>
+    <string name="game_explain_dont_confuse">Stay focus! Some tiles will confuse you!</string>
 </resources>

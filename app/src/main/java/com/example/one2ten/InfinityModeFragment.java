@@ -34,7 +34,7 @@ public class InfinityModeFragment extends Fragment {
     private int DURATION_OF_ALPHA = 3000;
     private int INFINITY = 1;
 
-    private int currentTileRandomPlace;
+    private int currentTileRandomPlace = 4; // static number for the explain mode
     private int randomColor;
     private int probability;
     private int numberToShowOnButton = 1;
@@ -62,12 +62,13 @@ public class InfinityModeFragment extends Fragment {
     private TextView currentScoreTV;
     private TextView timeInfo;
     private TextView highScoreInfo;
+    private TextView hitTileExplainTV;
 
     private AnimatorListenerAdapter animatorListenerAdapter;
 
     private ImageButton backToMenu;
 
-    private boolean isFirstClick;
+    private boolean explainMode = true;
 
     private ViewGroup viewGroup;
 
@@ -115,13 +116,11 @@ public class InfinityModeFragment extends Fragment {
         highScoreInfSharedPref = this.getActivity().getSharedPreferences("yourHighScoreInfinity", Context.MODE_PRIVATE);
         highScore = highScoreInfSharedPref.getInt("yourHighScoreInfinity", 1);
 
-        isFirstClick = true;
-
         bindGridViews(view);
 
         setTopBar(View.VISIBLE);
 
-        currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+//        currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
 
         backToMenu.setOnClickListener(ReturnHomeListener);
 
@@ -148,6 +147,7 @@ public class InfinityModeFragment extends Fragment {
                     }
 
                     if (view.getTag().equals(String.valueOf(currentTileRandomPlace))) {
+
                         checkAndStopTileAnimation(mAnimationSet0); // remove all listeners and stops animation
                         checkAndStopTileAnimation(mAnimationSet1);
                         checkAndStopTileAnimation(mAnimationSet2);
@@ -187,7 +187,32 @@ public class InfinityModeFragment extends Fragment {
                             isHighScoreAcheviedForFirstTime = true;
                         }
 
-                        currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+
+                        if (explainMode) { // display 3 messages to the user that explain how to play
+                            DURATION_OF_ALPHA = 9999; // make duration longer for reading explains
+
+                            switch (numberToShowOnButton) // show on static places on the grid
+                            {
+                                case 1:
+                                    currentTileRandomPlace = 4;
+                                case 2:
+                                    currentTileRandomPlace = 17;
+                                    hitTileExplainTV.setText(R.string.game_explain_asc);
+                                    break;
+                                case 3:
+                                    currentTileRandomPlace = 22;
+                                    hitTileExplainTV.setText(R.string.game_explain_dont_confuse);
+                                    break;
+                                case 4:
+                                    hitTileExplainTV.setVisibility(View.INVISIBLE);
+                                    explainMode = false;
+                                    break;
+                            }
+                        } else {
+
+                            currentTileRandomPlace = generateRandomNumber(MAX_BUTTON, MIN_BUTTON);
+                        }
+
                         randomColor = generateRandomNumber(colorsArray.length - 1, 0);
 
                         mAnimationSet0 = fadeOutButton(currentTileRandomPlace);
@@ -396,6 +421,9 @@ public class InfinityModeFragment extends Fragment {
         timerLinearLayout.getLayoutParams().width = 110; // TODO - fix this static assignment
         currentScoreTV.setText("1"); // set current yourHighScoreInfinity
 
+        hitTileExplainTV = view.findViewById(R.id.game_explain);
+
+
         initTextViews(view);
     }
 
@@ -445,6 +473,14 @@ public class InfinityModeFragment extends Fragment {
 
             gameOverDialog.tryAgainButton.setVisibility(View.INVISIBLE);
             gameOverDialog.tryAgainButton.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+
+//            gameOverDialog.resumeButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+//                    LinearLayout.LayoutParams.WRAP_CONTENT)); // set the text width and height from (match_parent,0) to (match_parent,wrap_content)
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(30,30,30,30);
+            gameOverDialog.resumeButton.setLayoutParams(params);
+
         }
     };
 
@@ -462,3 +498,4 @@ public class InfinityModeFragment extends Fragment {
     }
 
 }
+
