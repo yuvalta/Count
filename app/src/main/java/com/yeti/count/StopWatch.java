@@ -1,4 +1,4 @@
-package com.example.one2ten;
+package com.yeti.count;
 
 import android.os.SystemClock;
 import android.widget.Chronometer;
