@@ -70,20 +70,6 @@ public class StopWatchModeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        rewardedAd = new RewardedAd(getContext(), "ca-app-pub-3940256099942544/5224354917");
-//
-//        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
-//            @Override
-//            public void onRewardedAdLoaded() {
-//                // Ad successfully loaded.
-//            }
-//
-//            @Override
-//            public void onRewardedAdFailedToLoad(int errorCode) {
-//                // Ad failed to load. look for return values on https://developers.google.com/admob/android/rewarded-ads
-//            }
-//        };
-//        rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
     }
 
     @Override
@@ -222,7 +208,7 @@ public class StopWatchModeFragment extends Fragment {
         backToMenu = getActivity().findViewById(R.id.back_to_menu_btn);
         currentScoreTV = getActivity().findViewById(R.id.current_scoreTV);
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
-        stopWatch = getActivity().findViewById(R.id.timerTV);
+//        stopWatch = getActivity().findViewById(R.id.timerTV);
 
         currentScoreTV.setText("0"); // set current yourHighScoreInfinity
 

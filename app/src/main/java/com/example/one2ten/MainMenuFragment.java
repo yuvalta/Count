@@ -30,7 +30,7 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
 
     LinearLayout topBar;
 
-    TextView timerTV;
+//    TextView timerTV;
     TextView pointsTV;
     TextView currentScoreTV;
     TextView timeInfo;
@@ -53,7 +53,8 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
 
     private RewardedVideoAd rewardedVideoAd;
 
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
+//    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917"; sample ad
+    private static final String AD_UNIT_ID = "ca-app-pub-8337271880027338/4583708698";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
         mainMenuFragment = this;
 
         // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(getContext(), "ca-app-pub-8337271880027338~3922746600");
 
         rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
         rewardedVideoAd.setRewardedVideoAdListener(this);
@@ -80,18 +81,18 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
 
         topBar = getActivity().findViewById(R.id.top_bar);
 
-        timerTV = getActivity().findViewById(R.id.timerTV);
+//        timerTV = getActivity().findViewById(R.id.timerTV);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
 
         timerModeButton = view.findViewById(R.id.timer_mode_button);
         infinityModeButton = view.findViewById(R.id.infinity_mode_button);
         backToMenu = getActivity().findViewById(R.id.back_to_menu_btn);
 
-        timerTV = getActivity().findViewById(R.id.timerTV);
+//        timerTV = getActivity().findViewById(R.id.timerTV);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
         currentScoreTV = getActivity().findViewById(R.id.current_scoreTV);
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
-        timeInfo = getActivity().findViewById(R.id.timer_infoTV);
+//        timeInfo = getActivity().findViewById(R.id.timer_infoTV);
         appName = view.findViewById(R.id.appNameText);
 
         muteSounds = view.findViewById(R.id.mute_sounds);
@@ -155,11 +156,11 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
 
     private void setTopBar(int showTopBar) {
 
-        timerTV.setVisibility(showTopBar);
+//        timerTV.setVisibility(showTopBar);
         pointsTV.setVisibility(showTopBar);
         currentScoreTV.setVisibility(showTopBar);
         backToMenu.setVisibility(showTopBar);
-        timeInfo.setVisibility(showTopBar);
+//        timeInfo.setVisibility(showTopBar);
         highScoreInfo.setVisibility(showTopBar);
 
     }
@@ -178,7 +179,7 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
     public void onResume() {
 
         // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(getContext(), "ca-app-pub-8337271880027338~3922746600");
 
         rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getContext());
         rewardedVideoAd.setRewardedVideoAdListener(this);
@@ -189,7 +190,7 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
 
     private void loadRewardedVideoAd() {
         if (!rewardedVideoAd.isLoaded()) {
-            Toast.makeText(getContext(), "bbb", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "bbb", Toast.LENGTH_SHORT).show();
 
             rewardedVideoAd.loadAd(AD_UNIT_ID, new AdRequest.Builder().build());
         }
@@ -198,7 +199,7 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
 
     public void showRewardedVideo() {
         if (rewardedVideoAd.isLoaded()) {
-            Toast.makeText(getContext(), "aaa", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "aaa", Toast.LENGTH_SHORT).show();
 
             rewardedVideoAd.show();
         }
@@ -206,7 +207,7 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
 
     @Override
     public void onRewardedVideoAdLoaded() {
-        Toast.makeText(getActivity(), "loaded", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "loaded", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -222,7 +223,7 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
     @Override
     public void onRewardedVideoAdClosed() {
         if (!isRewarded) { // if user stops ad in the middle
-            Toast.makeText(getActivity(), "closed", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "closed", Toast.LENGTH_SHORT).show();
             if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }

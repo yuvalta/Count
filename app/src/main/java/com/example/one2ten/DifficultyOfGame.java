@@ -40,7 +40,7 @@ public class DifficultyOfGame {
 //    private int LEVEL_20 = 500;
 
     private int PROB_1 = 0;
-    private int PROB_2 = 40;
+    private int PROB_2 = 50;
     private int PROB_3 = 50;
     private int PROB_4 = 60;
     private int PROB_5 = 70;

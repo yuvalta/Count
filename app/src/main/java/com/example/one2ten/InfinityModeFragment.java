@@ -411,14 +411,14 @@ public class InfinityModeFragment extends Fragment {
     public void bindGridViews(View view) {
         // topBar binding
         topBar = getActivity().findViewById(R.id.top_bar);
-        timerLinearLayout = getActivity().findViewById(R.id.timer_ll);
+//        timerLinearLayout = getActivity().findViewById(R.id.timer_ll);
         pointsTV = getActivity().findViewById(R.id.pointsTV);
         backToMenu = getActivity().findViewById(R.id.back_to_menu_btn);
         currentScoreTV = getActivity().findViewById(R.id.current_scoreTV);
         highScoreInfo = getActivity().findViewById(R.id.high_score_infoTV);
 
         pointsTV.setText(String.valueOf(highScore));
-        timerLinearLayout.getLayoutParams().width = 110; // TODO - fix this static assignment
+        //timerLinearLayout.getLayoutParams().width = 110; // TODO - fix this static assignment
         currentScoreTV.setText("1"); // set current yourHighScoreInfinity
 
         hitTileExplainTV = view.findViewById(R.id.game_explain);

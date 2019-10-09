@@ -17,46 +17,21 @@
         android:layout_height="80dp"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:layout_gravity="bottom"
-            android:layout_marginTop="10dp"
-            android:id="@+id/back_to_menu_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_arrow_back_black_24dp" />
-
         <LinearLayout
-            android:id="@+id/timer_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_gravity="bottom">
 
-            <TextView
-                android:id="@+id/timer_infoTV"
+            <ImageButton
+                android:layout_marginHorizontal="20dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:id="@+id/back_to_menu_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="4dp"
-                android:fontFamily="@font/poiret_family"
-                android:text="@string/timer_info"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <Chronometer
-                android:id="@+id/timerTV"
-                android:layout_width="130dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/poiret_family"
-                android:text="@string/time_counter"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_arrow_back_black_24dp" />
         </LinearLayout>
 
 
@@ -65,7 +40,7 @@
             android:layout_width="85dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="4"
+            android:layout_weight="2"
             android:fontFamily="@font/poiret_family"
             android:gravity="center"
             android:text="@string/current_score"
@@ -78,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="4"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <TextView
