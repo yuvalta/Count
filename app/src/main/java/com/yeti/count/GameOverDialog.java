@@ -12,6 +12,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 public class GameOverDialog extends Dialog {
 
@@ -43,6 +47,8 @@ public class GameOverDialog extends Dialog {
     AnimatorSet animatorSet2;
     AnimatorSet animatorSet3;
     StopWatch stopper;
+
+    private InterstitialAd mInterstitialAd;
 
     boolean resultIsResumeOrTryAgain; // true --> resume, false --> try again
 
@@ -76,6 +82,10 @@ public class GameOverDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mInterstitialAd = new InterstitialAd(context);
+        mInterstitialAd.setAdUnitId("ca-app-pub-8337271880027338/1652767919");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.after_game_summary_dialog_layout);
@@ -170,6 +180,12 @@ public class GameOverDialog extends Dialog {
                     stopWatchModeFragment.winGame(false);
                 }
                 highScoreMessage.setVisibility(View.INVISIBLE);
+
+//                Toast.makeText(getContext() ,"test ad", Toast.LENGTH_LONG).show();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+
                 dismiss();
             }
         });

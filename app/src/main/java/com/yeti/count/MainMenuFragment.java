@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
@@ -54,7 +55,7 @@ public class MainMenuFragment extends Fragment implements RewardedVideoAdListene
 
 //    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917"; sample ad
     private static final String AD_UNIT_ID = "ca-app-pub-8337271880027338/4583708698";
-
+//
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

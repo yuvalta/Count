@@ -25,7 +25,7 @@
 
     <style name="AppName">
         <item name="android:gravity">center</item>
-        <item name="android:textSize">80sp</item>
+        <item name="android:textSize">70sp</item>
         <item name="android:color">@color/white</item>
         <item name="android:layout_marginTop">50dp</item>
         <item name="android:fontFamily">@font/mono</item>
